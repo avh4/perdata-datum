@@ -1,33 +1,41 @@
 package net.avh4.data.per.hash;
 
-import org.apache.commons.lang3.SerializationUtils;
+import net.avh4.data.per.serialize.SerializableSerializer;
+import net.avh4.data.per.serialize.Serializer;
 
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MessageDigestHasher implements Hasher {
+public class MessageDigestHasher<T> implements Hasher<T> {
     private final MessageDigest md;
+    private final Serializer<T> serializer;
 
     /**
      * The provided MessageDigest should not be used in other threads while #hash is being used.
      * You may safely call #hash in multiple threads.
      */
-    public MessageDigestHasher(MessageDigest md) {
+    public MessageDigestHasher(MessageDigest md, Serializer<T> serializer) {
         this.md = md;
+        this.serializer = serializer;
     }
 
-    public static MessageDigestHasher getSha1() {
+    public static MessageDigestHasher<Serializable> getSha1() {
+        return getSha1(new SerializableSerializer());
+    }
+
+    public static <T> MessageDigestHasher<T> getSha1(Serializer<T> serializer) {
         try {
             final MessageDigest md = MessageDigest.getInstance("SHA-1");
-            return new MessageDigestHasher(md);
+            return new MessageDigestHasher<>(md, serializer);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Couldn't create SHA1 hasher", e);
         }
     }
 
-    @Override public synchronized String hash(Object object) {
-        md.update(toBytes(object));
+    @Override public synchronized String hash(T object) {
+        final byte[] bytes = serializer.serializeToArray(object);
+        md.update(bytes);
         return toHexString(md.digest());
     }
 
@@ -37,19 +45,5 @@ public class MessageDigestHasher implements Hasher {
             sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
         }
         return sb.toString();
-    }
-
-    private byte[] toBytes(Object object) {
-        if (object instanceof Serializable) {
-            return serializableToBytes((Serializable) object);
-        } else if (object == null) {
-            return serializableToBytes((Serializable) object);
-        } else {
-            throw new RuntimeException("Don't know how to get digestable bytes for " + object);
-        }
-    }
-
-    private byte[] serializableToBytes(Serializable object) {
-        return SerializationUtils.serialize(object);
     }
 }

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 public class ListRef<T> extends Ref<ImmutableList<T>> {
 
-    protected final Class<T> itemClass;
+    private final Class<T> itemClass;
 
     public ListRef(RefRepository repository, String name, Class<T> itemClass) {
         super(repository, name);

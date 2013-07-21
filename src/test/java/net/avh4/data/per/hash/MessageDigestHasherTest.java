@@ -9,7 +9,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class MessageDigestHasherTest {
 
-    private MessageDigestHasher sha1;
+    private MessageDigestHasher<Serializable> sha1;
 
     @Before
     public void setUp() throws Exception {
@@ -24,8 +24,8 @@ public class MessageDigestHasherTest {
 
     @Test
     public void shouldHashSerializableObjects() throws Exception {
-        assertThat(sha1.hash(new TestSerializableObject(7))).isEqualTo("d9a9a6b47ec10ebd3db7eafc70a91da475e7d467");
-        assertThat(sha1.hash(new TestSerializableObject(0))).isEqualTo("10dbf64c5813eb68b8c86af78e9ba65073a779e6");
+        assertThat(sha1.hash(new TestSerializableObject(7))).isEqualTo("b7437e58f097e4f4e5b9a19ef2d47f159476a2c8");
+        assertThat(sha1.hash(new TestSerializableObject(0))).isEqualTo("6fbc7fac99f4cca5e35dd3c36bdc04621378ad31");
     }
 
     @Test
@@ -34,7 +34,9 @@ public class MessageDigestHasherTest {
     }
 
     private static class TestSerializableObject implements Serializable {
-        public int number;
+        private static final long serialVersionUID = 1L;
+
+        public final int number;
 
         private TestSerializableObject(int number) {
             this.number = number;

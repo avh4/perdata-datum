@@ -2,7 +2,8 @@ package net.avh4.data.per;
 
 import net.avh4.data.per.hash.Hasher;
 import net.avh4.data.per.hash.MessageDigestHasher;
-import org.apache.commons.lang3.SerializationUtils;
+import net.avh4.data.per.serialize.SerializableSerializer;
+import net.avh4.data.per.serialize.Serializer;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,14 +13,20 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class InMemoryRefService implements RefService<Serializable> {
     private final HashMap<String, String> refs = new HashMap<>();
     private final HashMap<String, byte[]> store = new HashMap<>();
-    private final Hasher hasher;
+    private final Hasher<Serializable> hasher;
+    private final Serializer<Serializable> serializer;
 
     public InMemoryRefService() {
         this(MessageDigestHasher.getSha1());
     }
 
-    public InMemoryRefService(Hasher hasher) {
+    public InMemoryRefService(Hasher<Serializable> hasher) {
+        this(hasher, new SerializableSerializer());
+    }
+
+    public InMemoryRefService(Hasher<Serializable> hasher, Serializer<Serializable> serializer) {
         this.hasher = hasher;
+        this.serializer = serializer;
     }
 
     @Override public String getContentKey(String refName) {
@@ -28,13 +35,13 @@ public class InMemoryRefService implements RefService<Serializable> {
 
     @Override public Serializable getContent(String contentKey) {
         final byte[] bytes = store.get(contentKey);
-        return (Serializable) SerializationUtils.deserialize(bytes);
+        return serializer.deserialize(bytes);
     }
 
     @Override public String put(Serializable object) {
         String key = hasher.hash(object);
         if (!store.containsKey(key)) {
-            final byte[] bytes = SerializationUtils.serialize(object);
+            final byte[] bytes = serializer.serializeToArray(object);
             store.put(key, bytes);
         }
         return key;
