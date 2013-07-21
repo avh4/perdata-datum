@@ -1,6 +1,6 @@
 ---
-package : com.example
-project : my-project
+package : net.avh4.data.per
+project : per
 description : ~
 project_url : ~
 github_user : ~
