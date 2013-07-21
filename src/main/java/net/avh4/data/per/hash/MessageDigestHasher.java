@@ -6,6 +6,10 @@ import java.security.NoSuchAlgorithmException;
 public class MessageDigestHasher implements Hasher {
     private final MessageDigest md;
 
+    /**
+     * The provided MessageDigest should not be used in other threads while #hash is being used.
+     * You may safely call #hash in multiple threads.
+     */
     public MessageDigestHasher(MessageDigest md) {
         this.md = md;
     }
@@ -20,7 +24,6 @@ public class MessageDigestHasher implements Hasher {
     }
 
     @Override public synchronized String hash(Object object) {
-        md.reset();
         md.update(toBytes(object));
         return toHexString(md.digest());
     }

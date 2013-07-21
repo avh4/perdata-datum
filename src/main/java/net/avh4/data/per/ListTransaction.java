@@ -18,5 +18,5 @@ public abstract class ListTransaction<T> implements Transaction<ImmutableList<T>
         return ImmutableList.copyOf(mutableList);
     }
 
-    public abstract void mutate(List<T> mutableList);
+    protected abstract void mutate(List<T> mutableList);
 }

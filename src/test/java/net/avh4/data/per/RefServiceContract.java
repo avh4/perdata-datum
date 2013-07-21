@@ -42,9 +42,22 @@ public abstract class RefServiceContract {
         assertThat(subject.getContentKey("new-ref")).isEqualTo(key1);
     }
 
+    @Test
+    public void updateRef_withNull_shouldRemoveRef() throws Exception {
+        subject.updateRef("new-ref", null, key1);
+        subject.updateRef("new-ref", key1, null);
+        assertThat(subject.getContentKey("new-ref")).isNull();
+    }
+
     @Test(expected = TransactionException.class)
     public void updateRef_whenNewRefIsThoughtToExist_shouldThrow() throws Exception {
         subject.updateRef("new-ref", key2, key1);
+    }
+
+    @Test(expected = TransactionException.class)
+    public void updateRef_whenNewRefIsThoughtNotToExist_shouldThrow() throws Exception {
+        subject.updateRef("new-ref", null, key1);
+        subject.updateRef("new-ref", null, key2);
     }
 
     @Test

@@ -39,7 +39,7 @@ public class InMemoryRefService implements RefService {
     @Override
     public void updateRef(String refName, String currentContentKey, String newContentKey) throws TransactionException {
         checkNotNull(refName);
-        if (!store.containsKey(newContentKey)) {
+        if (newContentKey != null && !store.containsKey(newContentKey)) {
             throw new RuntimeException("Content for " + newContentKey + " must be added with put before calling updateRef");
         }
         synchronized (this) {

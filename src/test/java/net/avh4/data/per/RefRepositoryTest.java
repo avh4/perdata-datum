@@ -41,6 +41,13 @@ public class RefRepositoryTest {
         assertThat(subject.getContent(refName)).isEqualTo(cows);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void getContent_withCorruptedStore_shouldThrow() throws Exception {
+        stub(service.getContentKey(refName)).toReturn(hash);
+        stub(service.getContent(hash)).toReturn(null);
+        subject.getContent(refName);
+    }
+
     @Test
     public void add_shouldPersistTheNewItem() throws Exception {
         ListRef<Cow> ref = subject.getRef(refName, Cow.class);
