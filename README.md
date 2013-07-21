@@ -1,3 +1,9 @@
-To use the archetype, 
+[![Build Status](https://secure.travis-ci.org//per.png?branch=master)](http://travis-ci.org//per)
 
-    bash <(curl http://archetypes.github.io/bootstrap.sh) archetypes/java
+## per
+
+
+
+## Build commands
+
+* [Mutation coverage](http://pitest.org/): `mvn clean test org.pitest:pitest-maven:mutationCoverage`
