@@ -14,19 +14,19 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.stub;
 
-public class RefProviderTest {
+public class RefRepositoryTest {
     private static final String refName = "__FAKE_REF_NAME__";
     private static final String hash = "__FAKE_HASH__";
     private static final String newHash = "__FAKE_NEW_HASH__";
     private static final String emptyListHash = "__EMPTY_LIST_HASH__";
-    private RefProvider subject;
+    private RefRepository subject;
     @Mock private RefService service;
     @Mock private ImmutableList<Cow> cows;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        subject = new RefProvider(service);
+        subject = new RefRepository(service);
         stub(service.put(Mockito.any(ImmutableList.class))).toReturn(newHash);
         stub(service.getEmptyListKey(Cow.class)).toReturn(emptyListHash);
         stub(service.getEmptyList(Cow.class)).toReturn(ImmutableList.<Cow>of());

@@ -5,10 +5,10 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RefProvider {
+public class RefRepository {
     private final RefService service;
 
-    public RefProvider(RefService service) {
+    public RefRepository(RefService service) {
         this.service = service;
     }
 

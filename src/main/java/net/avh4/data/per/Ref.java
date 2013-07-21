@@ -8,12 +8,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Ref<T> {
 
-    private final RefProvider provider;
+    private final RefRepository provider;
     private String contentKey;
     private ImmutableList<T> content;
     private String name;
 
-    protected Ref(RefProvider provider, String name, String contentKey, ImmutableList<T> content) {
+    protected Ref(RefRepository provider, String name, String contentKey, ImmutableList<T> content) {
         this.provider = provider;
         this.name = name;
         this.contentKey = contentKey;
