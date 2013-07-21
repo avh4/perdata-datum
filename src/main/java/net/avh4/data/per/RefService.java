@@ -17,5 +17,5 @@ public interface RefService {
      *                          then the update will fail, and the transaction will need to reapplied.
      * @param newContentKey     The key of the new content for the ref.  The content for this key must already have been stored with #put
      */
-    void updateRef(String refName, String currentContentKey, String newContentKey);
+    void updateRef(String refName, String currentContentKey, String newContentKey) throws TransactionException;
 }

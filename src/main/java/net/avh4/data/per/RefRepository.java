@@ -16,7 +16,12 @@ public class RefRepository {
         final Object content = getContent(refName);
         final Object newContent = transaction.transform(content);
         final String newKey = service.put(newContent);
-        service.updateRef(refName, key, newKey);
+        try {
+            service.updateRef(refName, key, newKey);
+        } catch (TransactionException e) {
+            // TODO
+            e.printStackTrace();
+        }
     }
 
     private String getContentKey(String refName) {
