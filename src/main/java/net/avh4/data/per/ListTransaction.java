@@ -7,7 +7,12 @@ import java.util.List;
 
 public abstract class ListTransaction<T> implements Transaction<ImmutableList<T>> {
     @Override public ImmutableList<T> transform(ImmutableList<T> immutableState) {
-        ArrayList<T> mutableList = new ArrayList<>(immutableState);
+        ArrayList<T> mutableList;
+        if (immutableState == null) {
+            mutableList = new ArrayList<>();
+        } else {
+            mutableList = new ArrayList<>(immutableState);
+        }
         mutate(mutableList);
         return ImmutableList.copyOf(mutableList);
     }

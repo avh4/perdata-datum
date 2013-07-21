@@ -18,7 +18,6 @@ public class RefRepositoryTest {
     private static final String refName = "__FAKE_REF_NAME__";
     private static final String hash = "__FAKE_HASH__";
     private static final String newHash = "__FAKE_NEW_HASH__";
-    private static final String emptyListHash = "__EMPTY_LIST_HASH__";
     private RefRepository subject;
     @Mock private RefService service;
     @Mock private ImmutableList<Cow> cows;
@@ -28,14 +27,12 @@ public class RefRepositoryTest {
         MockitoAnnotations.initMocks(this);
         subject = new RefRepository(service);
         stub(service.put(Mockito.any(ImmutableList.class))).toReturn(newHash);
-        stub(service.getEmptyListKey(Cow.class)).toReturn(emptyListHash);
-        stub(service.getItems(emptyListHash, Cow.class)).toReturn(ImmutableList.<Cow>of());
     }
 
     @Test
-    public void newRef_withNoPersistedData_shouldBeEmpty() throws Exception {
+    public void newRef_withNoPersistedData_shouldBeNull() throws Exception {
         Ref<Cow> ref = subject.getRef(refName, Cow.class);
-        assertThat(ref.content()).isEmpty();
+        assertThat(ref.content()).isNull();
     }
 
     @Test
@@ -57,7 +54,7 @@ public class RefRepositoryTest {
         });
         final InOrder inOrder = inOrder(service);
         inOrder.verify(service).put(ImmutableList.of(bessie));
-        inOrder.verify(service).updateRef(refName, emptyListHash, newHash);
+        inOrder.verify(service).updateRef(refName, null, newHash);
     }
 
     private static class Cow {

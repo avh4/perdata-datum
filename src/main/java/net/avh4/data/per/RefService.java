@@ -20,9 +20,4 @@ public interface RefService {
      * @param newContentKey     The key of the new content for the ref.  The content for this key must already have been stored with #put
      */
     void updateRef(String refName, String currentContentKey, String newContentKey);
-
-    /**
-     * @return The content key for an empty list
-     */
-    <T> String getEmptyListKey(Class<T> clazz);
 }
