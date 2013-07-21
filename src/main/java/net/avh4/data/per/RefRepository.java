@@ -26,7 +26,7 @@ public class RefRepository {
     public Object getContent(String refName) {
         final String contentKey = getContentKey(refName);
         if (contentKey == null) return null;
-        final Object content = service.getItems(contentKey);
+        final Object content = service.getContent(contentKey);
         if (content == null)
             throw new RuntimeException(service.toString() + "did not provide contents for " + contentKey + " which it promised for ref \"" + refName + "\"");
         return content;

@@ -3,7 +3,7 @@ package net.avh4.data.per;
 public interface RefService {
     String getContentKey(String refName);
 
-    Object getItems(String contentKey);
+    Object getContent(String contentKey);
 
     /**
      * @param object the object to store

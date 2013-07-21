@@ -37,7 +37,7 @@ public class RefRepositoryTest {
     @Test
     public void getContent_withPersistedData_shouldContainItems() throws Exception {
         stub(service.getContentKey(refName)).toReturn(hash);
-        stub(service.getItems(hash)).toReturn(cows);
+        stub(service.getContent(hash)).toReturn(cows);
         assertThat(subject.getContent(refName)).isEqualTo(cows);
     }
 
