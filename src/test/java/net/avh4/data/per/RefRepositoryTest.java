@@ -12,7 +12,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class RefRepositoryTest {
-    private static final String refName = "__FAKE_REF_NAME__";
+    private static final String refName = "__REF_NAME__";
     private static final String hash1 = "__HASH_1__";
     private static final String hash2 = "__HASH_2__";
     private static final String hash3 = "__HASH_3__";

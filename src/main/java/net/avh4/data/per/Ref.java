@@ -5,7 +5,7 @@ public abstract class Ref<T> {
     protected final RefRepository repository;
     protected final String name;
 
-    public Ref(String name, RefRepository repository) {
+    public Ref(RefRepository repository, String name) {
         this.name = name;
         this.repository = repository;
     }

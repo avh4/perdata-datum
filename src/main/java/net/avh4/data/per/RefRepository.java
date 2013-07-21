@@ -7,10 +7,6 @@ public class RefRepository {
         this.service = service;
     }
 
-    public <T> ListRef<T> getRef(String refName, Class<T> clazz) {
-        return new ListRef<>(this, refName, clazz);
-    }
-
     public void execute(String refName, Transaction transaction) {
         boolean success = false;
         int attempts = 0;

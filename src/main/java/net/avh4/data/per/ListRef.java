@@ -7,7 +7,7 @@ public class ListRef<T> extends Ref<ImmutableList<T>> {
     protected final Class<T> itemClass;
 
     protected ListRef(RefRepository repository, String name, Class<T> itemClass) {
-        super(name, repository);
+        super(repository, name);
         this.itemClass = itemClass;
     }
 

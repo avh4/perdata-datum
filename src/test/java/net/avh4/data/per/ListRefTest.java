@@ -7,15 +7,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.*;
 
 public class ListRefTest {
     private static final String refName = "__REF_NAME__";
     private static final Class<TestObject> clazz = TestObject.class;
     private ListRef<TestObject> subject;
-    @Mock private RefRepository repository;
     private ImmutableList<TestObject> content;
+    @Mock private RefRepository repository;
+    @Mock private Transaction<ImmutableList<TestObject>> transaction;
 
     @Before
     public void setUp() throws Exception {
@@ -34,6 +34,12 @@ public class ListRefTest {
     public void getContent_withNoPersistedData_shouldReturnEmptyList() throws Exception {
         stub(repository.getContent(refName)).toReturn(null);
         assertThat(subject.content()).isEmpty();
+    }
+
+    @Test
+    public void execute_shouldProxyTheRepository() throws Exception {
+        subject.execute(transaction);
+        verify(repository).execute(refName, transaction);
     }
 
     private static class TestObject {
