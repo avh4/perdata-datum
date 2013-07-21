@@ -1,6 +1,5 @@
 package net.avh4.data.per;
 
-public class Transaction<T> {
-    public void run(T mutableState) {
-    }
+public interface Transaction<T> {
+    public T transform(T immutableState);
 }

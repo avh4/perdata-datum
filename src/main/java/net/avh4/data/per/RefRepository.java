@@ -3,9 +3,6 @@ package net.avh4.data.per;
 import com.google.common.collect.ImmutableList;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RefRepository {
     private final RefService service;
 
@@ -17,11 +14,9 @@ public class RefRepository {
         return new Ref<>(this, refName, clazz);
     }
 
-    public <T> void execute(Ref<T> ref, Transaction<? super List<T>> transaction) {
+    public <T> void execute(Ref<T> ref, Transaction<ImmutableList<T>> transaction) {
         String key = getContentKey(ref.name, ref.clazz);
-        final ArrayList<T> mutableState = new ArrayList<>(ref.content());
-        transaction.run(mutableState);
-        final ImmutableList<T> newItems = ImmutableList.copyOf(mutableState);
+        final ImmutableList<T> newItems = transaction.transform(ref.content());
         final String newKey = service.put(newItems);
         service.updateRef(ref.name, key, newKey);
     }

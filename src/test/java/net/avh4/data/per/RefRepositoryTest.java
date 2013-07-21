@@ -50,8 +50,8 @@ public class RefRepositoryTest {
     public void add_shouldPersistTheNewItem() throws Exception {
         Ref<Cow> ref = subject.getRef(refName, Cow.class);
         final Cow bessie = new Cow("Bessie", 14);
-        ref.execute(new Transaction<List<Cow>>() {
-            public void run(List<Cow> mutableItems) {
+        ref.execute(new ListTransaction<Cow>() {
+            public void mutate(List<Cow> mutableItems) {
                 mutableItems.add(bessie);
             }
         });

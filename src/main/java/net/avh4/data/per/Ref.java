@@ -2,8 +2,6 @@ package net.avh4.data.per;
 
 import com.google.common.collect.ImmutableList;
 
-import java.util.List;
-
 public class Ref<T> {
 
     private final RefRepository repository;
@@ -20,7 +18,7 @@ public class Ref<T> {
         return repository.getContent(name, clazz);
     }
 
-    public void execute(Transaction<? super List<T>> transaction) {
+    public void execute(Transaction<ImmutableList<T>> transaction) {
         repository.execute(this, transaction);
     }
 }
