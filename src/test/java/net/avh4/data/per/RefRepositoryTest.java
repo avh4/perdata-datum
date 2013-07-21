@@ -30,17 +30,15 @@ public class RefRepositoryTest {
     }
 
     @Test
-    public void getRef_withNoPersistedData_shouldBeNull() throws Exception {
-        ListRef<Cow> ref = subject.getRef(refName, Cow.class);
-        assertThat(ref.content()).isNull();
+    public void getContent_withNoPersistedData_shouldBeEmpty() throws Exception {
+        assertThat(subject.getContent(refName)).isNull();
     }
 
     @Test
-    public void getRef_withPersistedData_shouldContainItems() throws Exception {
+    public void getContent_withPersistedData_shouldContainItems() throws Exception {
         stub(service.getContentKey(refName)).toReturn(hash);
         stub(service.getItems(hash)).toReturn(cows);
-        ListRef ref = subject.getRef(refName, Cow.class);
-        assertThat(ref.content()).isEqualTo(cows);
+        assertThat(subject.getContent(refName)).isEqualTo(cows);
     }
 
     @Test

@@ -25,9 +25,15 @@ public class ListRefTest {
     }
 
     @Test
-    public void getContent_shouldProxyRefRepository() throws Exception {
-        stub(repository.getList(refName, clazz)).toReturn(content);
+    public void getContent_withPersistedData_shouldReturnTheContent() throws Exception {
+        stub(repository.getContent(refName)).toReturn(content);
         assertThat(subject.content()).isEqualTo(content);
+    }
+
+    @Test
+    public void getContent_withNoPersistedData_shouldReturnEmptyList() throws Exception {
+        stub(repository.getContent(refName)).toReturn(null);
+        assertThat(subject.content()).isEmpty();
     }
 
     private static class TestObject {

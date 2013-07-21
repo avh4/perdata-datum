@@ -1,7 +1,5 @@
 package net.avh4.data.per;
 
-import com.google.common.collect.ImmutableList;
-
 public class RefRepository {
     private final RefService service;
 
@@ -13,10 +11,10 @@ public class RefRepository {
         return new ListRef<>(this, refName, clazz);
     }
 
-    public <T> void execute(String refName, Class<T> clazz, Transaction<ImmutableList<T>> transaction) {
+    public void execute(String refName, Transaction transaction) {
         final String key = getContentKey(refName);
-        final ImmutableList<T> content = getList(refName, clazz);
-        final ImmutableList<T> newContent = transaction.transform(content);
+        final Object content = getContent(refName);
+        final Object newContent = transaction.transform(content);
         final String newKey = service.put(newContent);
         service.updateRef(refName, key, newKey);
     }
@@ -25,19 +23,12 @@ public class RefRepository {
         return service.getContentKey(refName);
     }
 
-    public <T> ImmutableList<T> getList(String refName, Class<T> clazz) {
+    public Object getContent(String refName) {
         final String contentKey = getContentKey(refName);
         if (contentKey == null) return null;
         final Object content = service.getItems(contentKey);
         if (content == null)
             throw new RuntimeException(service.toString() + "did not provide contents for " + contentKey + " which it promised for ref \"" + refName + "\"");
-        if (!(content instanceof ImmutableList))
-            throw new ClassCastException("Content " + content + " is not an ImmutableList");
-        for (java.lang.Object o : (ImmutableList) content) {
-            if (!clazz.isInstance(o))
-                throw new ClassCastException("Item " + o.toString() + " is not an instance of " + clazz.toString());
-        }
-        //noinspection unchecked
-        return (ImmutableList<T>) content;
+        return content;
     }
 }

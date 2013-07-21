@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ListTransaction<T> implements Transaction<ImmutableList<T>> {
+
     @Override public ImmutableList<T> transform(ImmutableList<T> immutableState) {
         ArrayList<T> mutableList;
         if (immutableState == null) {
