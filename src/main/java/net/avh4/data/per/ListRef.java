@@ -19,6 +19,6 @@ public class ListRef<T> {
     }
 
     public void execute(Transaction<ImmutableList<T>> transaction) {
-        repository.execute(this, transaction);
+        repository.execute(this.name, this.clazz, transaction);
     }
 }

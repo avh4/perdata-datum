@@ -13,11 +13,12 @@ public class RefRepository {
         return new ListRef<>(this, refName, clazz);
     }
 
-    public <T> void execute(ListRef<T> ref, Transaction<ImmutableList<T>> transaction) {
-        String key = getContentKey(ref.name);
-        final ImmutableList<T> newItems = transaction.transform(ref.content());
-        final String newKey = service.put(newItems);
-        service.updateRef(ref.name, key, newKey);
+    public <T> void execute(String refName, Class<T> clazz, Transaction<ImmutableList<T>> transaction) {
+        final String key = getContentKey(refName);
+        final ImmutableList<T> content = getList(refName, clazz);
+        final ImmutableList<T> newContent = transaction.transform(content);
+        final String newKey = service.put(newContent);
+        service.updateRef(refName, key, newKey);
     }
 
     private String getContentKey(String refName) {
