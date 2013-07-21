@@ -68,6 +68,7 @@ public class RefRepositoryTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void execute_whenRefIsChangedBeforeTransactionCompletes_shouldRetryTransaction() throws Exception {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -78,6 +79,7 @@ public class RefRepositoryTest {
 
         subject.execute(refName, transaction);
 
+        verify(transaction).transform(storedContent3);
         final InOrder inOrder = inOrder(service);
         inOrder.verify(service).put(newContent4);
         inOrder.verify(service).updateRef(refName, hash3, hash4);

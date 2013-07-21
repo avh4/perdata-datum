@@ -15,11 +15,11 @@ public class RefRepository {
         boolean success = false;
         int attempts = 0;
         do {
+            final String key = getContentKey(refName);
+            final Object content = getContent(refName);
+            final Object newContent = transaction.transform(content);
+            final String newKey = service.put(newContent);
             try {
-                final String key = getContentKey(refName);
-                final Object content = getContent(refName);
-                final Object newContent = transaction.transform(content);
-                final String newKey = service.put(newContent);
                 service.updateRef(refName, key, newKey);
                 success = true;
             } catch (TransactionException e) {
