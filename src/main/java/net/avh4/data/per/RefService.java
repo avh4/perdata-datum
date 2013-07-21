@@ -5,5 +5,5 @@ import com.google.common.collect.ImmutableList;
 public interface RefService {
     String getContentKey(String refName);
 
-    ImmutableList getItems(String hash);
+    <T> ImmutableList<T> getItems(String hash, Class<T> clazz);
 }

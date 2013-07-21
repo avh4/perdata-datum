@@ -14,7 +14,7 @@ public class RefProviderTest {
     private static final String hash = "__FAKE_HASH__";
     private RefProvider subject;
     @Mock private RefService service;
-    @Mock private ImmutableList items;
+    @Mock private ImmutableList<Cow> cows;
 
     @Before
     public void setUp() throws Exception {
@@ -24,15 +24,18 @@ public class RefProviderTest {
 
     @Test
     public void newRef_withNoPersistedData_shouldBeEmpty() throws Exception {
-        Ref ref = subject.getRef(refName);
+        Ref<Cow> ref = subject.getRef(refName, Cow.class);
         assertThat(ref.items()).isEmpty();
     }
 
     @Test
     public void newRef_withPersistedData_shouldContainItems() throws Exception {
         stub(service.getContentKey(refName)).toReturn(hash);
-        stub(service.getItems(hash)).toReturn(items);
-        Ref ref = subject.getRef(refName);
-        assertThat(ref.items()).isEqualTo(items);
+        stub(service.getItems(hash, Cow.class)).toReturn(cows);
+        Ref ref = subject.getRef(refName, Cow.class);
+        assertThat(ref.items()).isEqualTo(cows);
+    }
+
+    private static class Cow {
     }
 }
