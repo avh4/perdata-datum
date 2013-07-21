@@ -12,16 +12,24 @@ public class RefRepository {
     }
 
     public void execute(String refName, Transaction transaction) {
-        final String key = getContentKey(refName);
-        final Object content = getContent(refName);
-        final Object newContent = transaction.transform(content);
-        final String newKey = service.put(newContent);
-        try {
-            service.updateRef(refName, key, newKey);
-        } catch (TransactionException e) {
-            // TODO
-            e.printStackTrace();
+        boolean success = false;
+        int attempts = 0;
+        do {
+            try {
+                final String key = getContentKey(refName);
+                final Object content = getContent(refName);
+                final Object newContent = transaction.transform(content);
+                final String newKey = service.put(newContent);
+                service.updateRef(refName, key, newKey);
+                success = true;
+            } catch (TransactionException e) {
+                attempts++;
+                if (attempts > 10) {
+                    throw new RuntimeException("Transaction for \"" + refName + "\" failed 10 times, aborting: " + transaction, e);
+                }
+            }
         }
+        while (!success);
     }
 
     private String getContentKey(String refName) {
