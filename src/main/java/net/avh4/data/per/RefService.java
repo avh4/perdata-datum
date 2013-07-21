@@ -25,6 +25,4 @@ public interface RefService {
      * @return The content key for an empty list
      */
     <T> String getEmptyListKey(Class<T> clazz);
-
-    <T> ImmutableList<T> getEmptyList(Class<T> clazz);
 }

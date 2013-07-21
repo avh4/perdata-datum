@@ -29,13 +29,13 @@ public class RefRepositoryTest {
         subject = new RefRepository(service);
         stub(service.put(Mockito.any(ImmutableList.class))).toReturn(newHash);
         stub(service.getEmptyListKey(Cow.class)).toReturn(emptyListHash);
-        stub(service.getEmptyList(Cow.class)).toReturn(ImmutableList.<Cow>of());
+        stub(service.getItems(emptyListHash, Cow.class)).toReturn(ImmutableList.<Cow>of());
     }
 
     @Test
     public void newRef_withNoPersistedData_shouldBeEmpty() throws Exception {
         Ref<Cow> ref = subject.getRef(refName, Cow.class);
-        assertThat(ref.items()).isEmpty();
+        assertThat(ref.content()).isEmpty();
     }
 
     @Test
@@ -43,19 +43,7 @@ public class RefRepositoryTest {
         stub(service.getContentKey(refName)).toReturn(hash);
         stub(service.getItems(hash, Cow.class)).toReturn(cows);
         Ref ref = subject.getRef(refName, Cow.class);
-        assertThat(ref.items()).isEqualTo(cows);
-    }
-
-    @Test
-    public void add_shouldAddTheNewItem() throws Exception {
-        Ref<Cow> ref = subject.getRef(refName, Cow.class);
-        final Cow bessie = new Cow("Bessie", 14);
-        ref.execute(new Transaction<List<Cow>>() {
-            public void run(List<Cow> mutableItems) {
-                mutableItems.add(bessie);
-            }
-        });
-        assertThat(ref.items()).containsExactly(bessie);
+        assertThat(ref.content()).isEqualTo(cows);
     }
 
     @Test

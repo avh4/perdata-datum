@@ -4,42 +4,23 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 public class Ref<T> {
 
-    private final RefRepository provider;
-    private String contentKey;
-    private ImmutableList<T> content;
-    private String name;
+    private final RefRepository repository;
+    protected final String name;
+    protected final Class<T> clazz;
 
-    protected Ref(RefRepository provider, String name, String contentKey, ImmutableList<T> content) {
-        this.provider = provider;
+    protected Ref(RefRepository repository, String name, Class<T> clazz) {
+        this.repository = repository;
         this.name = name;
-        this.contentKey = contentKey;
-        this.content = content;
+        this.clazz = clazz;
     }
 
-    public List<T> items() {
-        return content;
-    }
-
-    protected void setContent(String contentKey, ImmutableList<T> content) {
-        checkNotNull(contentKey);
-        checkNotNull(content);
-        this.contentKey = contentKey;
-        this.content = content;
+    public ImmutableList<T> content() {
+        return repository.getContent(name, clazz);
     }
 
     public void execute(Transaction<? super List<T>> transaction) {
-        provider.execute(this, transaction);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getContentKey() {
-        return contentKey;
+        repository.execute(this, transaction);
     }
 }
