@@ -1,17 +1,15 @@
 package net.avh4.data.per;
 
-import com.google.common.collect.ImmutableList;
-
 public interface RefService {
     String getContentKey(String refName);
 
-    <T> ImmutableList<T> getItems(String contentKey, Class<T> clazz);
+    Object getItems(String contentKey);
 
     /**
      * @param object the object to store
      * @return the content key of the stored object
      */
-    String put(ImmutableList<?> object);
+    String put(Object object);
 
     /**
      * @param refName           The name of the ref to update.
