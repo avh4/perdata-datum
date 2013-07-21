@@ -2,14 +2,16 @@ package net.avh4.data.per;
 
 import net.avh4.data.per.hash.Hasher;
 import net.avh4.data.per.hash.MessageDigestHasher;
+import org.apache.commons.lang3.SerializationUtils;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class InMemoryRefService implements RefService {
+public class InMemoryRefService implements RefService<Serializable> {
     private final HashMap<String, String> refs = new HashMap<>();
-    private final HashMap<String, Object> store = new HashMap<>();
+    private final HashMap<String, byte[]> store = new HashMap<>();
     private final Hasher hasher;
 
     public InMemoryRefService() {
@@ -24,14 +26,16 @@ public class InMemoryRefService implements RefService {
         return refs.get(refName);
     }
 
-    @Override public Object getContent(String contentKey) {
-        return store.get(contentKey);
+    @Override public Serializable getContent(String contentKey) {
+        final byte[] bytes = store.get(contentKey);
+        return (Serializable) SerializationUtils.deserialize(bytes);
     }
 
-    @Override public String put(Object object) {
+    @Override public String put(Serializable object) {
         String key = hasher.hash(object);
         if (!store.containsKey(key)) {
-            store.put(key, object);
+            final byte[] bytes = SerializationUtils.serialize(object);
+            store.put(key, bytes);
         }
         return key;
     }

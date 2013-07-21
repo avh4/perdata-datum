@@ -1,15 +1,15 @@
 package net.avh4.data.per;
 
-public interface RefService {
+public interface RefService<T> {
     String getContentKey(String refName);
 
-    Object getContent(String contentKey);
+    T getContent(String contentKey);
 
     /**
      * @param object the object to store
      * @return the content key of the stored object
      */
-    String put(Object object);
+    String put(T object);
 
     /**
      * @param refName           The name of the ref to update.

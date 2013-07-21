@@ -1,10 +1,10 @@
 package net.avh4.data.per;
 
 @SuppressWarnings("UnusedDeclaration")
-public class StdoutLoggingRefServiceWrapper implements RefService {
-    private final RefService inner;
+public class StdoutLoggingRefServiceWrapper<T> implements RefService<T> {
+    private final RefService<T> inner;
 
-    public StdoutLoggingRefServiceWrapper(RefService inner) {
+    public StdoutLoggingRefServiceWrapper(RefService<T> inner) {
         this.inner = inner;
     }
 
@@ -12,11 +12,11 @@ public class StdoutLoggingRefServiceWrapper implements RefService {
         return inner.getContentKey(refName);
     }
 
-    @Override public Object getContent(String contentKey) {
+    @Override public T getContent(String contentKey) {
         return inner.getContent(contentKey);
     }
 
-    @Override public String put(Object object) {
+    @Override public String put(T object) {
         final String key = inner.put(object);
         log("Put for " + key + ": " + object.toString());
         return key;

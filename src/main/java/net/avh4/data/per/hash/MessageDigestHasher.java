@@ -1,5 +1,8 @@
 package net.avh4.data.per.hash;
 
+import org.apache.commons.lang3.SerializationUtils;
+
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -37,10 +40,16 @@ public class MessageDigestHasher implements Hasher {
     }
 
     private byte[] toBytes(Object object) {
-        if (object instanceof String) {
-            return ((String) object).getBytes();
+        if (object instanceof Serializable) {
+            return serializableToBytes((Serializable) object);
+        } else if (object == null) {
+            return serializableToBytes((Serializable) object);
         } else {
             throw new RuntimeException("Don't know how to get digestable bytes for " + object);
         }
+    }
+
+    private byte[] serializableToBytes(Serializable object) {
+        return SerializationUtils.serialize(object);
     }
 }
