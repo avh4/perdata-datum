@@ -2,9 +2,9 @@ package net.avh4.data.per.service;
 
 import java.util.HashMap;
 
-public class InMemoryStorage implements Storage {
+public class InMemoryStorage<S> implements Storage<S> {
     private final HashMap<String, String> refs = new HashMap<>();
-    private final HashMap<String, byte[]> store = new HashMap<>();
+    private final HashMap<String, S> store = new HashMap<>();
 
     @Override
     public String fetchRef(String refName) {
@@ -12,18 +12,18 @@ public class InMemoryStorage implements Storage {
     }
 
     @Override
-    public byte[] fetchBytes(String contentKey) {
+    public S fetch(String contentKey) {
         return store.get(contentKey);
     }
 
     @Override
-    public boolean hasBytes(String contentKey) {
+    public boolean isStored(String contentKey) {
         return store.containsKey(contentKey);
     }
 
     @Override
-    public void storeBytes(String contentKey, byte[] bytes) {
-        store.put(contentKey, bytes);
+    public void store(String contentKey, S content) {
+        store.put(contentKey, content);
     }
 
     @Override

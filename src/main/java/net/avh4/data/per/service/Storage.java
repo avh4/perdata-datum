@@ -1,13 +1,13 @@
 package net.avh4.data.per.service;
 
-public interface Storage {
+public interface Storage<S> {
     String fetchRef(String refName);
 
     void storeRef(String refName, String newContentKey);
 
-    byte[] fetchBytes(String contentKey);
+    S fetch(String contentKey);
 
-    boolean hasBytes(String contentKey);
+    boolean isStored(String contentKey);
 
-    void storeBytes(String contentKey, byte[] bytes);
+    void store(String contentKey, S content);
 }

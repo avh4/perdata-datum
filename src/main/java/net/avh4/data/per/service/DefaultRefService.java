@@ -5,12 +5,12 @@ import net.avh4.data.per.serialize.Serializer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class DefaultRefService<T> implements RefService<T> {
+public class DefaultRefService<T, S> implements RefService<T> {
     private final Hasher<T> hasher;
-    private final Serializer<T> serializer;
-    private final Storage storage;
+    private final Serializer<T, S> serializer;
+    private final Storage<S> storage;
 
-    public DefaultRefService(Hasher<T> hasher, Serializer<T> serializer, Storage storage) {
+    public DefaultRefService(Hasher<T> hasher, Serializer<T, S> serializer, Storage<S> storage) {
         this.hasher = hasher;
         this.serializer = serializer;
         this.storage = storage;
@@ -23,16 +23,16 @@ public class DefaultRefService<T> implements RefService<T> {
 
     @Override
     public T getContent(String contentKey) {
-        final byte[] bytes = storage.fetchBytes(contentKey);
-        return serializer.deserialize(bytes);
+        final S content = storage.fetch(contentKey);
+        return serializer.deserialize(content);
     }
 
     @Override
     public String put(T object) {
         String key = hasher.hash(object);
-        if (!storage.hasBytes(key)) {
-            final byte[] bytes = serializer.serializeToArray(object);
-            storage.storeBytes(key, bytes);
+        if (!storage.isStored(key)) {
+            final S content = serializer.serializeToArray(object);
+            storage.store(key, content);
         }
         return key;
     }
@@ -40,7 +40,7 @@ public class DefaultRefService<T> implements RefService<T> {
     @Override
     public void updateRef(String refName, String currentContentKey, String newContentKey) throws TransactionException {
         checkNotNull(refName);
-        if (newContentKey != null && !storage.hasBytes(newContentKey)) {
+        if (newContentKey != null && !storage.isStored(newContentKey)) {
             throw new RuntimeException("Content for " + newContentKey + " must be added with put before calling updateRef");
         }
         synchronized (this) {

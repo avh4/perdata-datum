@@ -9,13 +9,13 @@ import java.security.NoSuchAlgorithmException;
 
 public class MessageDigestHasher<T> implements Hasher<T> {
     private final MessageDigest md;
-    private final Serializer<T> serializer;
+    private final Serializer<T, byte[]> serializer;
 
     /**
      * The provided MessageDigest should not be used in other threads while #hash is being used.
      * You may safely call #hash in multiple threads.
      */
-    public MessageDigestHasher(MessageDigest md, Serializer<T> serializer) {
+    public MessageDigestHasher(MessageDigest md, Serializer<T, byte[]> serializer) {
         this.md = md;
         this.serializer = serializer;
     }
@@ -24,7 +24,7 @@ public class MessageDigestHasher<T> implements Hasher<T> {
         return getSha1(new SerializableSerializer());
     }
 
-    public static <T> MessageDigestHasher<T> getSha1(Serializer<T> serializer) {
+    public static <T> MessageDigestHasher<T> getSha1(Serializer<T, byte[]> serializer) {
         try {
             final MessageDigest md = MessageDigest.getInstance("SHA-1");
             return new MessageDigestHasher<>(md, serializer);
