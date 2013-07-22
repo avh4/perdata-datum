@@ -30,7 +30,10 @@ public class StdoutLoggingRefServiceWrapper<T> implements RefService<T> {
         try {
             inner.updateRef(refName, currentContentKey, newContentKey);
             log("Set ref \"" + refName + "\": " + currentContentKey + " -> " + newContentKey);
-        } catch (Throwable e) {
+        } catch (TransactionException e) {
+            log("Set ref \"" + refName + "\": !! " + e.getLocalizedMessage());
+            throw e;
+        } catch (RuntimeException e) {
             log("Set ref \"" + refName + "\": !! " + e.getLocalizedMessage());
             throw e;
         }

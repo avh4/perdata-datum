@@ -3,8 +3,8 @@ package net.avh4.data.per.service;
 import java.util.HashMap;
 
 public class InMemoryStorage<S> implements Storage<S> {
-    private final HashMap<String, String> refs = new HashMap<>();
-    private final HashMap<String, S> store = new HashMap<>();
+    private final HashMap<String, String> refs = new HashMap<String, String>();
+    private final HashMap<String, S> store = new HashMap<String, S>();
 
     @Override
     public String fetchRef(String refName) {

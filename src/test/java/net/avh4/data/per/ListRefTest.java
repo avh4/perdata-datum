@@ -21,7 +21,7 @@ public class ListRefTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         content = ImmutableList.of(mock(TestObject.class), mock(TestObject.class));
-        subject = new ListRef<>(repository, refName, clazz);
+        subject = new ListRef<TestObject>(repository, refName, clazz);
     }
 
     @Test

@@ -26,7 +26,7 @@ public class Steps {
     @Given("^a storage service$")
     public void a_storage_service() throws Throwable {
         refService = new InMemoryRefService();
-        refRepository = new RefRepository<>(refService);
+        refRepository = new RefRepository<Serializable>(refService);
     }
 
     @Given("^a data class definition$")
@@ -38,7 +38,7 @@ public class Steps {
     public void I_create_a_list_ref_for_the_data_class() throws Throwable {
         checkNotNull(refRepository);
         checkNotNull(dataClass);
-        listRef = new ListRef<>(refRepository, "Farmyard", dataClass);
+        listRef = new ListRef<FarmAnimal>(refRepository, "Farmyard", dataClass);
     }
 
     @When("^I add some data to the list ref$")
@@ -63,8 +63,8 @@ public class Steps {
         checkNotNull(dataClass);
         checkNotNull(addedData);
 
-        RefRepository newRepository = new RefRepository<>(refService);
-        ListRef<FarmAnimal> newListRef = new ListRef<>(newRepository, "Farmyard", dataClass);
+        RefRepository newRepository = new RefRepository<Serializable>(refService);
+        ListRef<FarmAnimal> newListRef = new ListRef<FarmAnimal>(newRepository, "Farmyard", dataClass);
 
         assertThat(newListRef.content()).contains(addedData);
     }

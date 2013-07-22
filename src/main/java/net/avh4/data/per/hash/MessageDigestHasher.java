@@ -27,7 +27,7 @@ public class MessageDigestHasher<T> implements Hasher<T> {
     public static <T> MessageDigestHasher<T> getSha1(Serializer<T, byte[]> serializer) {
         try {
             final MessageDigest md = MessageDigest.getInstance("SHA-1");
-            return new MessageDigestHasher<>(md, serializer);
+            return new MessageDigestHasher<T>(md, serializer);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Couldn't create SHA1 hasher", e);
         }

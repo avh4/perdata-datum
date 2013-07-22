@@ -10,9 +10,9 @@ public abstract class ListTransaction<T> implements Transaction<ImmutableList<T>
     @Override public ImmutableList<T> transform(ImmutableList<T> immutableState) {
         ArrayList<T> mutableList;
         if (immutableState == null) {
-            mutableList = new ArrayList<>();
+            mutableList = new ArrayList<T>();
         } else {
-            mutableList = new ArrayList<>(immutableState);
+            mutableList = new ArrayList<T>(immutableState);
         }
         mutate(mutableList);
         return ImmutableList.copyOf(mutableList);

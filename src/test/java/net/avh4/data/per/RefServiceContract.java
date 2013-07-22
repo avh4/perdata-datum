@@ -85,8 +85,8 @@ public abstract class RefServiceContract<T> {
 
     @Test
     public void put_withDifferentContent_shouldHaveDifferentKeys() throws Exception {
-        HashSet<T> values = new HashSet<>(100);
-        HashSet<String> keys = new HashSet<>(100);
+        HashSet<T> values = new HashSet<T>(100);
+        HashSet<String> keys = new HashSet<String>(100);
         for (int i = 0; i < 100; i++) {
             Random random = new Random();
             T content;

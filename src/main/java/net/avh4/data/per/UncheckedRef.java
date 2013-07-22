@@ -10,11 +10,11 @@ public class UncheckedRef<T> extends Ref<T> {
         }
 
         public <T> UncheckedRef<T> getRef(String name) {
-            return new UncheckedRef<>(repository, name);
+            return new UncheckedRef<T>(repository, name);
         }
 
         public <T> UncheckedRef<T> getRef(String name, @SuppressWarnings("UnusedParameters") Class<T> clazz) {
-            return new UncheckedRef<>(repository, name);
+            return new UncheckedRef<T>(repository, name);
         }
     }
 
