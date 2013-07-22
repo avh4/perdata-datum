@@ -1,4 +1,4 @@
-package net.avh4.data.per;
+package net.avh4.data.per.service;
 
 public interface RefService<T> {
     String getContentKey(String refName);

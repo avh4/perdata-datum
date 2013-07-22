@@ -1,6 +1,7 @@
-package net.avh4.data.per;
+package net.avh4.data.per.service;
 
 import com.google.common.collect.ImmutableList;
+import net.avh4.data.per.RefServiceContract;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 

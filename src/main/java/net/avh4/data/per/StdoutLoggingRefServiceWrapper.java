@@ -1,5 +1,8 @@
 package net.avh4.data.per;
 
+import net.avh4.data.per.service.RefService;
+import net.avh4.data.per.service.TransactionException;
+
 @SuppressWarnings("UnusedDeclaration")
 public class StdoutLoggingRefServiceWrapper<T> implements RefService<T> {
     private final RefService<T> inner;
