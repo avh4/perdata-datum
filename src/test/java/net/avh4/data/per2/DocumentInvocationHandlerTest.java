@@ -32,8 +32,15 @@ public class DocumentInvocationHandlerTest {
         assertThat(subject.subDocument().string()).isEqualTo("marine");
     }
 
+    @Test
+    public void method_withStringArrayReturnValue() throws Exception {
+        stub(store.get(entity, "strings")).toReturn("[\"A\",\"B\",\"C\"]");
+        assertThat(subject.strings()).containsOnly("A", "B", "C");
+    }
+
     private interface TestDocument {
         String string();
+        String[] strings();
         SubDocument subDocument();
 
         interface SubDocument {

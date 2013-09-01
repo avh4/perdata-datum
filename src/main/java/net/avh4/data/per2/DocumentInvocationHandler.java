@@ -1,5 +1,9 @@
 package net.avh4.data.per2;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -27,8 +31,19 @@ class DocumentInvocationHandler implements InvocationHandler {
 
         if (returnType.equals(String.class)) {
             return storedValue;
-        } else {
+        } else if (returnType.isArray()) {
+            return jsonToArray(returnType.getComponentType(), storedValue);
+        } else  {
             return getDocument(store, returnType, storedValue);
         }
+    }
+
+    private Object jsonToArray(Class<?> itemClass, String json) throws JSONException {
+        final JSONArray jsonArray = new JSONArray(json);
+        final Object a = Array.newInstance(itemClass, jsonArray.length());
+        for (int i = 0; i < jsonArray.length(); i++) {
+            Array.set(a, i, jsonArray.get(i));
+        }
+        return a;
     }
 }
