@@ -49,6 +49,11 @@ public class DocumentInvocationHandlerTest {
     }
 
     @Test
+    public void method_withArrayReturnValue_withNoStoredValue_shouldBeEmpty() throws Exception {
+        assertThat(subject.strings()).hasSize(0);
+    }
+
+    @Test
     public void idMethod() throws Exception {
         assertThat(subject._id()).isEqualTo(entity);
     }

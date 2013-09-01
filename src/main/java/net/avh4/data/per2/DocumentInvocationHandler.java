@@ -48,6 +48,7 @@ class DocumentInvocationHandler implements InvocationHandler {
     }
 
     private Object jsonToArray(Class<?> itemClass, String json) throws JSONException {
+        if (json == null) return Array.newInstance(itemClass, 0);
         final JSONArray jsonArray = new JSONArray(json);
         final Object a = Array.newInstance(itemClass, jsonArray.length());
         for (int i = 0; i < jsonArray.length(); i++) {
