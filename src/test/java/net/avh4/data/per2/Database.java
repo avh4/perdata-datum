@@ -1,5 +1,8 @@
 package net.avh4.data.per2;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 
 import static net.avh4.data.per2.DatumIntegrationTest.Book;
@@ -49,27 +52,20 @@ public class Database {
 
             @Override public Chapter[] chapters() {
                 return new Chapter[]{
-                        new MyChapter(ids.get(2)),
-                        new MyChapter(ids.get(3)),
+                        getMyChapter(ids.get(2)),
+                        getMyChapter(ids.get(3)),
                 };
             }
         };
         return results;
     }
 
-    private class MyChapter implements Book.Chapter {
-        private final EntityId entityId;
-
-        public MyChapter(EntityId entityId) {
-            this.entityId = entityId;
-        }
-
-        @Override public String title() {
-            return store.get(entityId, "title");
-        }
-
-        @Override public String body() {
-            return store.get(entityId, "body");
-        }
+    private Book.Chapter getMyChapter(final EntityId entityId) {
+        return (Book.Chapter) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{Book.Chapter.class},
+                new InvocationHandler() {
+                    @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        return store.get(entityId, method.getName());
+                    }
+                });
     }
 }
