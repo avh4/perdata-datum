@@ -13,7 +13,7 @@ public class DatumIntegrationTest {
 
     public interface Book {
         public String title();
-        public Person[] authors();
+        public Person author();
         public Chapter[] chapters();
 
         public interface Person {
@@ -46,7 +46,7 @@ public class DatumIntegrationTest {
 
                 author[0] = db.create();
                 db.set(author[0], "name", "Daniel Pinkwater");
-                db.add(book[0], "authors", author[0]);
+                db.set(book[0], "author", author[0]);
 
                 EntityId chapter1 = db.create();
                 db.set(chapter1, "title", "Chapter 1");
@@ -70,8 +70,8 @@ public class DatumIntegrationTest {
         assertThat(books).isNotNull().hasSize(1).hasAllElementsOfType(Book.class);
 
         assertThat(books[0].title()).isNotNull().isEqualTo("The Big Orange Splot");
-        assertThat(books[0].authors()).isNotNull().hasSize(1).hasAllElementsOfType(Book.Person.class);
-        assertThat(books[0].authors()[0].name()).isEqualTo("Daniel Manus Pinkwater");
+        assertThat(books[0].author()).isNotNull();
+        assertThat(books[0].author().name()).isEqualTo("Daniel Manus Pinkwater");
         assertThat(books[0].chapters()).isNotNull().hasSize(2).hasAllElementsOfType(Book.Chapter.class);
         assertThat(books[0].chapters()[0].title()).isEqualTo("Chapter 1");
         assertThat(books[0].chapters()[0].body()).startsWith("Mr. Plumbean lived on a");

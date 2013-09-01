@@ -1,7 +1,6 @@
 package net.avh4.data.per2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static net.avh4.data.per2.DatumIntegrationTest.Book;
 
@@ -40,13 +39,11 @@ public class Database {
                 return store.get(ids.get(0), "title");
             }
 
-            @Override public Person[] authors() {
-                return new Person[]{
-                        new Person() {
-                            @Override public String name() {
-                                return "Daniel Manus Pinkwater";
-                            }
-                        }
+            @Override public Person author() {
+                return new Person() {
+                    @Override public String name() {
+                        return "Daniel Manus Pinkwater";
+                    }
                 };
             }
 
