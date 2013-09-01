@@ -1,14 +1,20 @@
 package net.avh4.data.per2;
 
+import java.util.HashMap;
+
 import static net.avh4.data.per2.DatumIntegrationTest.Book;
 
 public class Database {
+
+    private HashMap<String, Object> values = new HashMap<String, Object>();
+    private int nextId = 0;
+
     public EntityId create() {
-        return null;
+        return new EntityId("" + (++nextId));
     }
 
     public void set(EntityId entityId, String action, Object value) {
-
+        values.put(entityId.toString() + "-" + action, value);
     }
 
     public void add(EntityId entityId, String action, Object value) {
@@ -16,14 +22,14 @@ public class Database {
     }
 
     public void transaction(Runnable runnable) {
-
+        runnable.run();
     }
 
     public Book[] query(Class<Book> documentClass) {
         final Book[] results = new Book[1];
         results[0] = new Book() {
             @Override public String title() {
-                return "The Big Orange Splot";
+                return (String) values.get("1-title");
             }
 
             @Override public Person[] authors() {
