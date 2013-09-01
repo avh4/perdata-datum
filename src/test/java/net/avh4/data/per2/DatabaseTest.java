@@ -18,19 +18,19 @@ public class DatabaseTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        subject = new Database(store);
-        entity = subject.create();
+        subject = new DatabaseImpl(store);
+        entity = create();
     }
 
     @Test
     public void create_shouldGenerateId() throws Exception {
-        assertThat(subject.create()).isNotNull();
+        assertThat(entity).isNotNull();
     }
 
     @Test
     public void create_shouldGenerateUniqueId() throws Exception {
-        final String entity1 = subject.create();
-        final String entity2 = subject.create();
+        final String entity1 = create();
+        final String entity2 = create();
         assertThat(entity1).isEqualTo(entity1);
         assertThat(entity2).isEqualTo(entity2);
         assertThat(entity1).isNotEqualTo(entity2);
@@ -39,19 +39,19 @@ public class DatabaseTest {
 
     @Test
     public void set_shouldStoreDatum() throws Exception {
-        subject.set(entity, "action", "value");
+        set(entity, "action", "value");
         verify(store).write(entity, "action", "value");
     }
 
     @Test
     public void set_withEntityId_shouldStoreDatum() throws Exception {
-        subject.set(entity, "self_reference", entity);
+        set(entity, "self_reference", entity);
         verify(store).write(entity, "self_reference", entity);
     }
 
     @Test
     public void add_shouldStoreDatum() throws Exception {
-        subject.add(entity, "links", "value1");
+        add(entity, "links", "value1");
         verify(store).write(entity, "links", "[\"value1\"]");
     }
 
@@ -59,13 +59,37 @@ public class DatabaseTest {
     public void add_withExistingValue_shouldAddValue() throws Exception {
         stub(store.get(entity, "links")).toReturn("[\"value1\"]");
 
-        subject.add(entity, "links", "value2");
+        add(entity, "links", "value2");
         verify(store).write(entity, "links", "[\"value1\",\"value2\"]");
     }
 
     @Test
     public void add_withEntityId_shouldStoreDatum() throws Exception {
-        subject.add(entity, "self_reference", entity);
+        add(entity, "self_reference", entity);
         verify(store).write(entity, "self_reference", "[\"" + entity + "\"]");
+    }
+
+    private String create() {
+        return subject.transact(new Transaction<String>() {
+            @Override public String run(TransactionContext t) {
+                return t.create();
+            }
+        });
+    }
+
+    private void set(final String entity, final String action, final String value) {
+        subject.transact(new Transaction<Void>() {
+            @Override public Void run(TransactionContext t) {
+                return t.set(entity, action, value);
+            }
+        });
+    }
+
+    private void add(final String entity, final String action, final String value) {
+        subject.transact(new Transaction<Void>() {
+            @Override public Void run(TransactionContext t) {
+                return t.add(entity, action, value);
+            }
+        });
     }
 }

@@ -1,9 +1,12 @@
 package net.avh4.data.per2;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
+
+import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -28,40 +31,44 @@ public class IntegrationTest {
     @Before
     public void setUp() throws Exception {
         MutablePicoContainer pico = new DefaultPicoContainer();
-        pico.addComponent(Database.class);
+        pico.addComponent(DatabaseImpl.class);
         pico.addComponent(MemoryDatumStore.class);
-        db = pico.getComponent(Database.class);
+        db = pico.getComponent(DatabaseImpl.class);
     }
 
     @Test
     public void test1() throws Exception {
-        final String[] book = new String[1];
-        final String[] author = new String[1];
-        db.transaction(new Runnable() {
-            @Override public void run() {
+        final List<String> ret = db.transact(new Transaction<List<String>>() {
+            @Override public List<String> run(TransactionContext db) {
 
-                book[0] = db.create();
-                db.set(book[0], "title", "The Big Orange Splot");
+                String book = db.create();
+                db.set(book, "title", "The Big Orange Splot");
 
-                author[0] = db.create();
-                db.set(author[0], "name", "Daniel Pinkwater");
-                db.set(book[0], "author", author[0]);
+                String author = db.create();
+                db.set(author, "name", "Daniel Pinkwater");
+                db.set(book, "author", author);
 
                 String chapter1 = db.create();
                 db.set(chapter1, "title", "Chapter 1");
                 db.set(chapter1, "body", "Mr. Plumbean lived on a ...");
-                db.add(book[0], "chapters", chapter1);
+                db.add(book, "chapters", chapter1);
+
+                return ImmutableList.of(book, author);
             }
         });
+        final String book = ret.get(0);
+        final String author = ret.get(1);
 
-        db.transaction(new Runnable() {
-            @Override public void run() {
-                db.set(author[0], "name", "Daniel Manus Pinkwater");
+        db.transact(new Transaction<Void>() {
+            @Override public Void run(TransactionContext db) {
+                db.set(author, "name", "Daniel Manus Pinkwater");
 
                 String chapter2 = db.create();
                 db.set(chapter2, "title", "Chapter 2");
                 db.set(chapter2, "body", "He liked it that ...");
-                db.add(book[0], "chapters", chapter2);
+                db.add(book, "chapters", chapter2);
+
+                return null;
             }
         });
 
