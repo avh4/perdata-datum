@@ -29,12 +29,18 @@ class DocumentInvocationHandler implements InvocationHandler {
         final String attribute_name = method.getName();
         final String storedValue = store.get(entityId, attribute_name);
 
-        if (returnType.equals(String.class)) {
-            return storedValue;
-        } else if (returnType.isArray()) {
+        if (returnType.isArray()) {
             return jsonToArray(returnType.getComponentType(), storedValue);
-        } else  {
-            return getDocument(store, returnType, storedValue);
+        } else {
+            return toObject(returnType, storedValue);
+        }
+    }
+
+    private Object toObject(Class<?> clazz, String storedValue) {
+        if (clazz.equals(String.class)) {
+            return storedValue;
+        } else {
+            return getDocument(store, clazz, storedValue);
         }
     }
 
@@ -42,7 +48,7 @@ class DocumentInvocationHandler implements InvocationHandler {
         final JSONArray jsonArray = new JSONArray(json);
         final Object a = Array.newInstance(itemClass, jsonArray.length());
         for (int i = 0; i < jsonArray.length(); i++) {
-            Array.set(a, i, jsonArray.get(i));
+            Array.set(a, i, toObject(itemClass, jsonArray.getString(i)));
         }
         return a;
     }

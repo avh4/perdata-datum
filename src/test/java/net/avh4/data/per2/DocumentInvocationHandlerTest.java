@@ -38,10 +38,21 @@ public class DocumentInvocationHandlerTest {
         assertThat(subject.strings()).containsOnly("A", "B", "C");
     }
 
+    @Test
+    public void method_withDocumentArrayReturnValue() throws Exception {
+        stub(store.get(entity, "subDocuments")).toReturn("[\"ID_A\",\"ID_B\"]");
+        stub(store.get("ID_A", "string")).toReturn("Marina");
+        stub(store.get("ID_B", "string")).toReturn("Marimba");
+        assertThat(subject.subDocuments()).hasSize(2).hasAllElementsOfType(TestDocument.SubDocument.class);
+        assertThat(subject.subDocuments()[0].string()).isEqualTo("Marina");
+        assertThat(subject.subDocuments()[1].string()).isEqualTo("Marimba");
+    }
+
     private interface TestDocument {
         String string();
         String[] strings();
         SubDocument subDocument();
+        SubDocument[] subDocuments();
 
         interface SubDocument {
             String string();
