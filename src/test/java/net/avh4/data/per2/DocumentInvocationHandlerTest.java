@@ -48,7 +48,13 @@ public class DocumentInvocationHandlerTest {
         assertThat(subject.subDocuments()[1].string()).isEqualTo("Marimba");
     }
 
+    @Test
+    public void idMethod() throws Exception {
+        assertThat(subject._id()).isEqualTo(entity);
+    }
+
     private interface TestDocument {
+        String _id();
         String string();
         String[] strings();
         SubDocument subDocument();

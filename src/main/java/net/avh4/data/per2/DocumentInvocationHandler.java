@@ -27,6 +27,9 @@ class DocumentInvocationHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         final Class<?> returnType = method.getReturnType();
         final String attribute_name = method.getName();
+
+        if (attribute_name.equals("_id")) return entityId;
+
         final String storedValue = store.get(entityId, attribute_name);
 
         if (returnType.isArray()) {
