@@ -1,5 +1,10 @@
 package net.avh4.data.per2;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONStringer;
+import org.json.JSONWriter;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -11,7 +16,8 @@ public class Database {
 
     private final DatumStore store;
     private int nextId = 0;
-    private ArrayList<EntityId> ids = new ArrayList<EntityId>();
+    @Deprecated
+    private final ArrayList<EntityId> ids = new ArrayList<EntityId>();
 
     public Database(DatumStore store) {
         this.store = store;
@@ -28,7 +34,19 @@ public class Database {
     }
 
     public void add(EntityId entityId, String action, Object value) {
-
+        final String currentValue = store.get(entityId, action);
+        try {
+            JSONArray array;
+            if (currentValue == null) {
+                array = new JSONArray();
+            } else {
+                array = new JSONArray(currentValue);
+            }
+            array.put(value);
+            store.write(entityId, action, array.toString());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void transaction(Runnable runnable) {

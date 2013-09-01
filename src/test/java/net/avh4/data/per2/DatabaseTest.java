@@ -6,17 +6,20 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verify;
 
 public class DatabaseTest {
     private Database subject;
 
     @Mock private DatumStore store;
+    private EntityId entity;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         subject = new Database(store);
+        entity = subject.create();
     }
 
     @Test
@@ -36,8 +39,21 @@ public class DatabaseTest {
 
     @Test
     public void set_shouldStoreDatum() throws Exception {
-        final EntityId entity = subject.create();
         subject.set(entity, "action", "value");
         verify(store).write(entity, "action", "value");
+    }
+
+    @Test
+    public void add_shouldStoreDatum() throws Exception {
+        subject.add(entity, "links", "value1");
+        verify(store).write(entity, "links", "[\"value1\"]");
+    }
+
+    @Test
+    public void add_withExistingValue_shouldAddValue() throws Exception {
+        stub(store.get(entity, "links")).toReturn("[\"value1\"]");
+
+        subject.add(entity, "links", "value2");
+        verify(store).write(entity, "links", "[\"value1\",\"value2\"]");
     }
 }
