@@ -1,20 +1,28 @@
 package net.avh4.data.per2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static net.avh4.data.per2.DatumIntegrationTest.Book;
 
 public class Database {
 
-    private HashMap<String, Object> values = new HashMap<String, Object>();
+    private final DatumStore store;
     private int nextId = 0;
+    private ArrayList<EntityId> ids = new ArrayList<EntityId>();
+
+    public Database(DatumStore store) {
+        this.store = store;
+    }
 
     public EntityId create() {
-        return new EntityId("" + (++nextId));
+        final EntityId entityId = new EntityId("" + (++nextId));
+        ids.add(entityId);
+        return entityId;
     }
 
     public void set(EntityId entityId, String action, Object value) {
-        values.put(entityId.toString() + "-" + action, value);
+        store.write(entityId, action, value.toString());
     }
 
     public void add(EntityId entityId, String action, Object value) {
@@ -29,7 +37,7 @@ public class Database {
         final Book[] results = new Book[1];
         results[0] = new Book() {
             @Override public String title() {
-                return (String) values.get("1-title");
+                return store.get(ids.get(0), "title");
             }
 
             @Override public Person[] authors() {

@@ -2,6 +2,8 @@ package net.avh4.data.per2;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -26,7 +28,10 @@ public class DatumIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        db = new Database();
+        MutablePicoContainer pico = new DefaultPicoContainer();
+        pico.addComponent(Database.class);
+        pico.addComponent(MemoryDatumStore.class);
+        db = pico.getComponent(Database.class);
     }
 
     @Test
