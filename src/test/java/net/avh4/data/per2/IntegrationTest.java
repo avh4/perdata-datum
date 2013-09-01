@@ -12,6 +12,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class IntegrationTest {
     private Database db;
+    private String bookId;
 
     public interface Book {
         public String title();
@@ -37,7 +38,40 @@ public class IntegrationTest {
     }
 
     @Test
-    public void test1() throws Exception {
+    public void testQuery() throws Exception {
+        createTestData();
+
+        Book book = db.get(Book.class, bookId);
+        assertThat(book).isNotNull();
+
+        assertThat(book.title()).isNotNull().isEqualTo("The Big Orange Splot");
+        assertThat(book.author()).isNotNull();
+        assertThat(book.author().name()).isEqualTo("Daniel Manus Pinkwater");
+        assertThat(book.chapters()).isNotNull().hasSize(2).hasAllElementsOfType(Book.Chapter.class);
+        assertThat(book.chapters()[0].title()).isEqualTo("Chapter 1");
+        assertThat(book.chapters()[0].body()).startsWith("Mr. Plumbean lived on a");
+        assertThat(book.chapters()[1].title()).isEqualTo("Chapter 2");
+        assertThat(book.chapters()[1].body()).startsWith("He liked it that");
+    }
+
+    @Test
+    public void testGet() throws Exception {
+        createTestData();
+
+        Book[] books = db.query(Book.class);
+        assertThat(books).isNotNull().hasSize(1).hasAllElementsOfType(Book.class);
+
+        assertThat(books[0].title()).isNotNull().isEqualTo("The Big Orange Splot");
+        assertThat(books[0].author()).isNotNull();
+        assertThat(books[0].author().name()).isEqualTo("Daniel Manus Pinkwater");
+        assertThat(books[0].chapters()).isNotNull().hasSize(2).hasAllElementsOfType(Book.Chapter.class);
+        assertThat(books[0].chapters()[0].title()).isEqualTo("Chapter 1");
+        assertThat(books[0].chapters()[0].body()).startsWith("Mr. Plumbean lived on a");
+        assertThat(books[0].chapters()[1].title()).isEqualTo("Chapter 2");
+        assertThat(books[0].chapters()[1].body()).startsWith("He liked it that");
+    }
+
+    private void createTestData() {
         final List<String> ret = db.transact(new Transaction<List<String>>() {
             @Override public List<String> run(TransactionContext db) {
 
@@ -56,7 +90,7 @@ public class IntegrationTest {
                 return ImmutableList.of(book, author);
             }
         });
-        final String book = ret.get(0);
+        bookId = ret.get(0);
         final String author = ret.get(1);
 
         db.transact(new Transaction<Void>() {
@@ -66,22 +100,10 @@ public class IntegrationTest {
                 String chapter2 = db.create();
                 db.set(chapter2, "title", "Chapter 2");
                 db.set(chapter2, "body", "He liked it that ...");
-                db.add(book, "chapters", chapter2);
+                db.add(bookId, "chapters", chapter2);
 
                 return null;
             }
         });
-
-        Book[] books = db.query(Book.class);
-        assertThat(books).isNotNull().hasSize(1).hasAllElementsOfType(Book.class);
-
-        assertThat(books[0].title()).isNotNull().isEqualTo("The Big Orange Splot");
-        assertThat(books[0].author()).isNotNull();
-        assertThat(books[0].author().name()).isEqualTo("Daniel Manus Pinkwater");
-        assertThat(books[0].chapters()).isNotNull().hasSize(2).hasAllElementsOfType(Book.Chapter.class);
-        assertThat(books[0].chapters()[0].title()).isEqualTo("Chapter 1");
-        assertThat(books[0].chapters()[0].body()).startsWith("Mr. Plumbean lived on a");
-        assertThat(books[0].chapters()[1].title()).isEqualTo("Chapter 2");
-        assertThat(books[0].chapters()[1].body()).startsWith("He liked it that");
     }
 }

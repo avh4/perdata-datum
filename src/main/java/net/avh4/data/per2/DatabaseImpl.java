@@ -52,11 +52,11 @@ public class DatabaseImpl implements Database, TransactionContext {
     @Override public <T> T[] query(Class<T> documentClass) {
         //noinspection unchecked
         final T[] results = (T[]) Array.newInstance(documentClass, 1);
-        results[0] = getDocument(documentClass, ids.get(0));
+        results[0] = get(documentClass, ids.get(0));
         return results;
     }
 
-    private <T> T getDocument(Class<T> documentClass, final String entityId) {
+    @Override public <T> T get(Class<T> documentClass, String entityId) {
         return DocumentInvocationHandler.getDocument(store, documentClass, entityId);
     }
 }
