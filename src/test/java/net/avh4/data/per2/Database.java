@@ -2,11 +2,7 @@ package net.avh4.data.per2;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONStringer;
-import org.json.JSONWriter;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 
@@ -61,11 +57,7 @@ public class Database {
             }
 
             @Override public Person author() {
-                return new Person() {
-                    @Override public String name() {
-                        return store.get(ids.get(1), "name");
-                    }
-                };
+                return getDocument(Person.class, ids.get(1));
             }
 
             @Override public Chapter[] chapters() {
@@ -79,12 +71,6 @@ public class Database {
     }
 
     private <T> T getDocument(Class<T> documentClass, final EntityId entityId) {
-        //noinspection unchecked
-        return (T) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{documentClass},
-                new InvocationHandler() {
-                    @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                        return store.get(entityId, method.getName());
-                    }
-                });
+        return DocumentInvocationHandler.getDocument(store, documentClass, entityId);
     }
 }

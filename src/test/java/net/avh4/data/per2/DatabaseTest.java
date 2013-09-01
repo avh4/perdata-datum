@@ -44,6 +44,12 @@ public class DatabaseTest {
     }
 
     @Test
+    public void set_withEntityId_shouldStoreDatum() throws Exception {
+        subject.set(entity, "self_reference", entity);
+        verify(store).write(entity, "self_reference", entity.toString());
+    }
+
+    @Test
     public void add_shouldStoreDatum() throws Exception {
         subject.add(entity, "links", "value1");
         verify(store).write(entity, "links", "[\"value1\"]");
@@ -55,5 +61,11 @@ public class DatabaseTest {
 
         subject.add(entity, "links", "value2");
         verify(store).write(entity, "links", "[\"value1\",\"value2\"]");
+    }
+
+    @Test
+    public void add_withEntityId_shouldStoreDatum() throws Exception {
+        subject.add(entity, "self_reference", entity);
+        verify(store).write(entity, "self_reference", "[\"" + entity.toString() + "\"]");
     }
 }
