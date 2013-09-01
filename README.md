@@ -1,7 +1,8 @@
-[![Build Status](https://secure.travis-ci.org//per.png?branch=master)](http://travis-ci.org//per)
+[![Build Status](https://secure.travis-ci.org/avh4/perdata.png?branch=master)](http://travis-ci.org/avh4/perdata)
 
-## per
+## perdata
 
+Experiments with persistent data APIs
 
 
 ## Build commands
