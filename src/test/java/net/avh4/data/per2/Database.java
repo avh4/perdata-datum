@@ -52,16 +52,17 @@ public class Database {
 
             @Override public Chapter[] chapters() {
                 return new Chapter[]{
-                        getMyChapter(ids.get(2)),
-                        getMyChapter(ids.get(3)),
+                        getDocument(Chapter.class, ids.get(2)),
+                        getDocument(Chapter.class, ids.get(3)),
                 };
             }
         };
         return results;
     }
 
-    private Book.Chapter getMyChapter(final EntityId entityId) {
-        return (Book.Chapter) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{Book.Chapter.class},
+    private <T> T getDocument(Class<T> documentClass, final EntityId entityId) {
+        //noinspection unchecked
+        return (T) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{documentClass},
                 new InvocationHandler() {
                     @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         return store.get(entityId, method.getName());
