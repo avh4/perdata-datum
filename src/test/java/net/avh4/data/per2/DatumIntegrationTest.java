@@ -36,8 +36,8 @@ public class DatumIntegrationTest {
 
     @Test
     public void test1() throws Exception {
-        final EntityId[] book = new EntityId[1];
-        final EntityId[] author = new EntityId[1];
+        final String[] book = new String[1];
+        final String[] author = new String[1];
         db.transaction(new Runnable() {
             @Override public void run() {
 
@@ -48,7 +48,7 @@ public class DatumIntegrationTest {
                 db.set(author[0], "name", "Daniel Pinkwater");
                 db.set(book[0], "author", author[0]);
 
-                EntityId chapter1 = db.create();
+                String chapter1 = db.create();
                 db.set(chapter1, "title", "Chapter 1");
                 db.set(chapter1, "body", "Mr. Plumbean lived on a ...");
                 db.add(book[0], "chapters", chapter1);
@@ -59,7 +59,7 @@ public class DatumIntegrationTest {
             @Override public void run() {
                 db.set(author[0], "name", "Daniel Manus Pinkwater");
 
-                EntityId chapter2 = db.create();
+                String chapter2 = db.create();
                 db.set(chapter2, "title", "Chapter 2");
                 db.set(chapter2, "body", "He liked it that ...");
                 db.add(book[0], "chapters", chapter2);

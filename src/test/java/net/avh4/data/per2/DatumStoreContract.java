@@ -7,14 +7,14 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public abstract class DatumStoreContract {
     private DatumStore subject;
-    private EntityId id1;
+    private String id1;
 
     protected abstract DatumStore createSubject();
 
     @Before
     public void setUp() throws Exception {
         subject = createSubject();
-        id1 = new EntityId("1");
+        id1 = "1";
     }
 
     @Test

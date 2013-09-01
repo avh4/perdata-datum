@@ -10,7 +10,7 @@ import static org.mockito.Mockito.stub;
 
 public class DocumentInvocationHandlerTest {
     private TestDocument subject;
-    @Mock private EntityId entity;
+    private String entity = "__ENTITY_ID__";
     @Mock private DatumStore store;
 
     @Before
@@ -25,7 +25,19 @@ public class DocumentInvocationHandlerTest {
         assertThat(subject.string()).isEqualTo("beans");
     }
 
+    @Test
+    public void method_withDocumentReturnValue() throws Exception {
+        stub(store.get(entity, "subDocument")).toReturn("__SUB_DOC_ID__");
+        stub(store.get("__SUB_DOC_ID__", "string")).toReturn("marine");
+        assertThat(subject.subDocument().string()).isEqualTo("marine");
+    }
+
     private interface TestDocument {
         String string();
+        SubDocument subDocument();
+
+        interface SubDocument {
+            String string();
+        }
     }
 }

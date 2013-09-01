@@ -13,7 +13,7 @@ public class DatabaseTest {
     private Database subject;
 
     @Mock private DatumStore store;
-    private EntityId entity;
+    private String entity;
 
     @Before
     public void setUp() throws Exception {
@@ -29,8 +29,8 @@ public class DatabaseTest {
 
     @Test
     public void create_shouldGenerateUniqueId() throws Exception {
-        final EntityId entity1 = subject.create();
-        final EntityId entity2 = subject.create();
+        final String entity1 = subject.create();
+        final String entity2 = subject.create();
         assertThat(entity1).isEqualTo(entity1);
         assertThat(entity2).isEqualTo(entity2);
         assertThat(entity1).isNotEqualTo(entity2);
@@ -46,7 +46,7 @@ public class DatabaseTest {
     @Test
     public void set_withEntityId_shouldStoreDatum() throws Exception {
         subject.set(entity, "self_reference", entity);
-        verify(store).write(entity, "self_reference", entity.toString());
+        verify(store).write(entity, "self_reference", entity);
     }
 
     @Test
@@ -66,6 +66,6 @@ public class DatabaseTest {
     @Test
     public void add_withEntityId_shouldStoreDatum() throws Exception {
         subject.add(entity, "self_reference", entity);
-        verify(store).write(entity, "self_reference", "[\"" + entity.toString() + "\"]");
+        verify(store).write(entity, "self_reference", "[\"" + entity + "\"]");
     }
 }

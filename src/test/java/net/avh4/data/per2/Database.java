@@ -13,23 +13,23 @@ public class Database {
     private final DatumStore store;
     private int nextId = 0;
     @Deprecated
-    private final ArrayList<EntityId> ids = new ArrayList<EntityId>();
+    private final ArrayList<String> ids = new ArrayList<String>();
 
     public Database(DatumStore store) {
         this.store = store;
     }
 
-    public EntityId create() {
-        final EntityId entityId = new EntityId("" + (++nextId));
+    public String create() {
+        final String entityId = "" + (++nextId);
         ids.add(entityId);
         return entityId;
     }
 
-    public void set(EntityId entityId, String action, Object value) {
+    public void set(String entityId, String action, Object value) {
         store.write(entityId, action, value.toString());
     }
 
-    public void add(EntityId entityId, String action, Object value) {
+    public void add(String entityId, String action, Object value) {
         final String currentValue = store.get(entityId, action);
         try {
             JSONArray array;
@@ -70,7 +70,7 @@ public class Database {
         return results;
     }
 
-    private <T> T getDocument(Class<T> documentClass, final EntityId entityId) {
+    private <T> T getDocument(Class<T> documentClass, final String entityId) {
         return DocumentInvocationHandler.getDocument(store, documentClass, entityId);
     }
 }
