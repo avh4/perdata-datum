@@ -3,6 +3,7 @@ package net.avh4.data.per2;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 
@@ -49,24 +50,10 @@ public class Database {
         runnable.run();
     }
 
-    public Book[] query(Class<Book> documentClass) {
-        final Book[] results = new Book[1];
-        results[0] = new Book() {
-            @Override public String title() {
-                return store.get(ids.get(0), "title");
-            }
-
-            @Override public Person author() {
-                return getDocument(Person.class, ids.get(1));
-            }
-
-            @Override public Chapter[] chapters() {
-                return new Chapter[]{
-                        getDocument(Chapter.class, ids.get(2)),
-                        getDocument(Chapter.class, ids.get(3)),
-                };
-            }
-        };
+    public <T> T[] query(Class<T> documentClass) {
+        //noinspection unchecked
+        final T[] results = (T[]) Array.newInstance(documentClass, 1);
+        results[0] = getDocument(documentClass, ids.get(0));
         return results;
     }
 
