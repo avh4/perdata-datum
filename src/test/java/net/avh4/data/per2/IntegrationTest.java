@@ -7,7 +7,7 @@ import org.picocontainer.MutablePicoContainer;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class DatumIntegrationTest {
+public class IntegrationTest {
     private Database db;
 
     public interface Book {

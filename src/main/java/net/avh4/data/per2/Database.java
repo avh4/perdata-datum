@@ -4,10 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-
-import static net.avh4.data.per2.DatumIntegrationTest.Book;
 
 public class Database {
 
