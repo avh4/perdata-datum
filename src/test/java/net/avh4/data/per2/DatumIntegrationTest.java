@@ -60,7 +60,7 @@ public class DatumIntegrationTest {
                 db.set(author[0], "name", "Daniel Manus Pinkwater");
 
                 EntityId chapter2 = db.create();
-                db.set(chapter2, "title", "Chapter 1");
+                db.set(chapter2, "title", "Chapter 2");
                 db.set(chapter2, "body", "He liked it that ...");
                 db.add(book[0], "chapters", chapter2);
             }

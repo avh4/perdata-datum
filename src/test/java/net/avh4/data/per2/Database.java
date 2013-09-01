@@ -42,34 +42,34 @@ public class Database {
             @Override public Person author() {
                 return new Person() {
                     @Override public String name() {
-                        return "Daniel Manus Pinkwater";
+                        return store.get(ids.get(1), "name");
                     }
                 };
             }
 
             @Override public Chapter[] chapters() {
                 return new Chapter[]{
-                        new Chapter() {
-                            @Override public String title() {
-                                return "Chapter 1";
-                            }
-
-                            @Override public String body() {
-                                return "Mr. Plumbean lived on a";
-                            }
-                        },
-                        new Chapter() {
-                            @Override public String title() {
-                                return "Chapter 2";
-                            }
-
-                            @Override public String body() {
-                                return "He liked it that";
-                            }
-                        }
+                        new MyChapter(ids.get(2)),
+                        new MyChapter(ids.get(3)),
                 };
             }
         };
         return results;
+    }
+
+    private class MyChapter implements Book.Chapter {
+        private final EntityId entityId;
+
+        public MyChapter(EntityId entityId) {
+            this.entityId = entityId;
+        }
+
+        @Override public String title() {
+            return store.get(entityId, "title");
+        }
+
+        @Override public String body() {
+            return store.get(entityId, "body");
+        }
     }
 }
