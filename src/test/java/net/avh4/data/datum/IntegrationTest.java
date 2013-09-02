@@ -1,50 +1,71 @@
 package net.avh4.data.datum;
 
+import net.avh4.data.datum.peer.java.DatabaseImpl;
+import net.avh4.data.datum.peer.java.DirectAccess;
+import net.avh4.data.datum.peer.java.Query;
+import net.avh4.data.datum.prim.*;
+import net.avh4.data.datum.store.DatumStore;
+import net.avh4.data.datum.store.MemoryDatumStore;
+import net.avh4.data.datum.transact.LocalTransactor;
+import net.avh4.data.datum.transact.Transaction;
+import net.avh4.data.datum.transact.Transactor;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.fest.assertions.Assertions.assertThat;
 
 public class IntegrationTest {
-    private Database db;
-    private String bookId;
+    private Transactor transactor;
+    private TempId bookId;
+    private DatumStore store;
+    private Query query;
+    private DirectAccess direct;
 
     public interface Book {
-        public String title();
+        String title();
 
-        public Person author();
+        Person author();
 
-        public Chapter[] chapters();
+        Chapter[] chapters();
 
         public interface Person {
-            public String name();
+            String name();
         }
 
         public interface Chapter {
-            public String title();
+            String title();
 
-            public String body();
+            String body();
         }
+    }
+
+    public interface Metadata {
+        String attempts();
     }
 
     @Before
     public void setUp() throws Exception {
         MutablePicoContainer pico = new DefaultPicoContainer();
         pico.addComponent(DatabaseImpl.class);
+        pico.addComponent(LocalTransactor.class);
         pico.addComponent(MemoryDatumStore.class);
-        db = pico.getComponent(DatabaseImpl.class);
+        store = pico.getComponent(DatumStore.class);
+        transactor = pico.getComponent(Transactor.class);
+        query = pico.getComponent(Query.class);
+        direct = pico.getComponent(DirectAccess.class);
     }
 
     @Test
-    public void testQuery() throws Exception {
+    public void testGet() throws Exception {
         createTestData();
 
-        Book book = db.get(Book.class, bookId);
+        Metadata meta = direct.get(store, Metadata.class, new KnownId("integration:metadata"));
+        assertThat(meta.attempts()).isEqualTo("2");
+
+        Book book = direct.get(store, Book.class, bookId);
         assertThat(book).isNotNull();
 
         assertThat(book.title()).isNotNull().isEqualTo("The Big Orange Splot");
@@ -57,11 +78,11 @@ public class IntegrationTest {
         assertThat(book.chapters()[1].body()).startsWith("He liked it that");
     }
 
-    @Test
-    public void testGet() throws Exception {
+    @Test @Ignore
+    public void testQuery() throws Exception {
         createTestData();
 
-        Book[] books = db.query(Book.class);
+        Book[] books = query.query(store, Book.class);
         assertThat(books).isNotNull().hasSize(1).hasAllElementsOfType(Book.class);
 
         assertThat(books[0].title()).isNotNull().isEqualTo("The Big Orange Splot");
@@ -75,38 +96,38 @@ public class IntegrationTest {
     }
 
     private void createTestData() {
-        final List<String> ret = db.transact(new Transaction<List<String>>() {
-            @Override public List<String> run(TransactionContext db) {
+        final Id meta = new KnownId("integration:metadata");
+        final TempId author = new TempId();
+        {
+            bookId = new TempId();
+            final TempId chapter1 = new TempId();
+            Transaction t1 = new Transaction()
+                    .set(new ValueDatum(meta, "attempts", "1"))
 
-                String book = db.create();
-                db.set(book, "title", "The Big Orange Splot");
+                    .set(new ValueDatum(bookId, "title", "The Big Orange Splot"))
 
-                String author = db.create();
-                db.set(author, "name", "Daniel Pinkwater");
-                db.set(book, "author", author);
+                    .set(new ValueDatum(author, "name", "Daniel Pinkwater"))
+                    .set(new RefDatum(bookId, "author", author))
 
-                String chapter1 = db.create();
-                db.set(chapter1, "title", "Chapter 1");
-                db.set(chapter1, "body", "Mr. Plumbean lived on a ...");
-                db.add(book, "chapters", chapter1);
+                    .set(new ValueDatum(chapter1, "title", "Chapter 1"))
+                    .set(new ValueDatum(chapter1, "body", "Mr. Plumbean lived on a ..."))
+                    .add(new RefDatum(bookId, "chapters", chapter1));
 
-                return Arrays.asList(book, author);
-            }
-        });
-        bookId = ret.get(0);
-        final String author = ret.get(1);
+            store = transactor.transact(t1);
+        }
 
-        db.transact(new Transaction<Void>() {
-            @Override public Void run(TransactionContext db) {
-                db.set(author, "name", "Daniel Manus Pinkwater");
+        {
+            final TempId chapter2 = new TempId();
+            Transaction t2 = new Transaction()
+                    .set(new ValueDatum(meta, "attempts", "2"))
 
-                String chapter2 = db.create();
-                db.set(chapter2, "title", "Chapter 2");
-                db.set(chapter2, "body", "He liked it that ...");
-                db.add(bookId, "chapters", chapter2);
+                    .set(new ValueDatum(author, "name", "Daniel Manus Pinkwater"))
 
-                return null;
-            }
-        });
+                    .set(new ValueDatum(chapter2, "title", "Chapter 2"))
+                    .set(new ValueDatum(chapter2, "body", "He liked it that ..."))
+                    .add(new RefDatum(bookId, "chapters", chapter2));
+
+            store = transactor.transact(t2);
+        }
     }
 }

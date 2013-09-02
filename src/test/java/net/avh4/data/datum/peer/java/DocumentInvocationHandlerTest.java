@@ -1,7 +1,8 @@
-package net.avh4.data.datum;
+package net.avh4.data.datum.peer.java;
 
-import net.avh4.data.datum.DatumStore;
-import net.avh4.data.datum.DocumentInvocationHandler;
+import net.avh4.data.datum.prim.Id;
+import net.avh4.data.datum.prim.KnownId;
+import net.avh4.data.datum.store.DatumStore;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,7 +13,7 @@ import static org.mockito.Mockito.stub;
 
 public class DocumentInvocationHandlerTest {
     private TestDocument subject;
-    private String entity = "__ENTITY_ID__";
+    private static final Id entity = new KnownId("__ENTITY_ID__");
     @Mock private DatumStore store;
 
     @Before
@@ -30,29 +31,24 @@ public class DocumentInvocationHandlerTest {
     @Test
     public void method_withDocumentReturnValue() throws Exception {
         stub(store.get(entity, "subDocument")).toReturn("__SUB_DOC_ID__");
-        stub(store.get("__SUB_DOC_ID__", "string")).toReturn("marine");
+        stub(store.get(new KnownId("__SUB_DOC_ID__"), "string")).toReturn("marine");
         assertThat(subject.subDocument().string()).isEqualTo("marine");
     }
 
     @Test
     public void method_withStringArrayReturnValue() throws Exception {
-        stub(store.get(entity, "strings")).toReturn("[\"A\",\"B\",\"C\"]");
+        stub(store.getArray(entity, "strings")).toReturn(new String[]{"A", "B", "C"});
         assertThat(subject.strings()).containsOnly("A", "B", "C");
     }
 
     @Test
     public void method_withDocumentArrayReturnValue() throws Exception {
-        stub(store.get(entity, "subDocuments")).toReturn("[\"ID_A\",\"ID_B\"]");
-        stub(store.get("ID_A", "string")).toReturn("Marina");
-        stub(store.get("ID_B", "string")).toReturn("Marimba");
+        stub(store.getArray(entity, "subDocuments")).toReturn(new String[]{"ID_A", "ID_B"});
+        stub(store.get(new KnownId("ID_A"), "string")).toReturn("Marina");
+        stub(store.get(new KnownId("ID_B"), "string")).toReturn("Marimba");
         assertThat(subject.subDocuments()).hasSize(2).hasAllElementsOfType(TestDocument.SubDocument.class);
         assertThat(subject.subDocuments()[0].string()).isEqualTo("Marina");
         assertThat(subject.subDocuments()[1].string()).isEqualTo("Marimba");
-    }
-
-    @Test
-    public void method_withArrayReturnValue_withNoStoredValue_shouldBeEmpty() throws Exception {
-        assertThat(subject.strings()).hasSize(0);
     }
 
     @Test
@@ -61,10 +57,14 @@ public class DocumentInvocationHandlerTest {
     }
 
     private interface TestDocument {
-        String _id();
+        Id _id();
+
         String string();
+
         String[] strings();
+
         SubDocument subDocument();
+
         SubDocument[] subDocuments();
 
         interface SubDocument {

@@ -1,6 +1,8 @@
-package net.avh4.data.datum;
+package net.avh4.data.datum.peer.java;
 
-import org.json.JSONArray;
+import net.avh4.data.datum.prim.Id;
+import net.avh4.data.datum.prim.KnownId;
+import net.avh4.data.datum.store.DatumStore;
 import org.json.JSONException;
 
 import java.lang.reflect.Array;
@@ -9,16 +11,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 class DocumentInvocationHandler implements InvocationHandler {
-    private final String entityId;
+    private final Id entityId;
     private final DatumStore store;
 
-    public static <T> T getDocument(DatumStore store, Class<T> documentClass, final String entityId) {
+    public static <T> T getDocument(DatumStore store, Class<T> documentClass, final Id entityId) {
         //noinspection unchecked
         return (T) Proxy.newProxyInstance(documentClass.getClassLoader(), new Class[]{documentClass},
                 new DocumentInvocationHandler(store, entityId));
     }
 
-    public DocumentInvocationHandler(DatumStore store, String entityId) {
+    public DocumentInvocationHandler(DatumStore store, Id entityId) {
         this.entityId = entityId;
         this.store = store;
     }
@@ -30,11 +32,11 @@ class DocumentInvocationHandler implements InvocationHandler {
 
         if (attribute_name.equals("_id")) return entityId;
 
-        final String storedValue = store.get(entityId, attribute_name);
-
         if (returnType.isArray()) {
-            return jsonToArray(returnType.getComponentType(), storedValue);
+            final String[] storeValues = store.getArray(entityId, attribute_name);
+            return stringsToObjects(returnType.getComponentType(), storeValues);
         } else {
+            final String storedValue = store.get(entityId, attribute_name);
             return toObject(returnType, storedValue);
         }
     }
@@ -43,16 +45,14 @@ class DocumentInvocationHandler implements InvocationHandler {
         if (clazz.equals(String.class)) {
             return storedValue;
         } else {
-            return getDocument(store, clazz, storedValue);
+            return getDocument(store, clazz, new KnownId(storedValue));
         }
     }
 
-    private Object jsonToArray(Class<?> itemClass, String json) throws JSONException {
-        if (json == null) return Array.newInstance(itemClass, 0);
-        final JSONArray jsonArray = new JSONArray(json);
-        final Object a = Array.newInstance(itemClass, jsonArray.length());
-        for (int i = 0; i < jsonArray.length(); i++) {
-            Array.set(a, i, toObject(itemClass, jsonArray.getString(i)));
+    private Object stringsToObjects(Class<?> itemClass, String[] values) {
+        final Object a = Array.newInstance(itemClass, values.length);
+        for (int i = 0; i < values.length; i++) {
+            Array.set(a, i, toObject(itemClass, values[i]));
         }
         return a;
     }
