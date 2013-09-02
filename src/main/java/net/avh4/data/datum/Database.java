@@ -1,4 +1,4 @@
-package net.avh4.data.per2;
+package net.avh4.data.datum;
 
 public interface Database {
     <T> T transact(Transaction<T> transaction);

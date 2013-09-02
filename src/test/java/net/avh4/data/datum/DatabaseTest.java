@@ -1,5 +1,6 @@
-package net.avh4.data.per2;
+package net.avh4.data.datum;
 
+import net.avh4.data.datum.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

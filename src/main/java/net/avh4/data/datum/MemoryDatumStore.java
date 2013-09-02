@@ -1,4 +1,4 @@
-package net.avh4.data.per2;
+package net.avh4.data.datum;
 
 import java.util.HashMap;
 
