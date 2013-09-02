@@ -1,6 +1,6 @@
 ---
-package : net.avh4.data.per
-project : per
+package : net.avh4.data
+project : datum
 description : ~
 project_url : ~
 github_user : ~

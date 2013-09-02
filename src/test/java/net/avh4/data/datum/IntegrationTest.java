@@ -1,12 +1,11 @@
 package net.avh4.data.datum;
 
-import com.google.common.collect.ImmutableList;
-import net.avh4.data.datum.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -17,7 +16,9 @@ public class IntegrationTest {
 
     public interface Book {
         public String title();
+
         public Person author();
+
         public Chapter[] chapters();
 
         public interface Person {
@@ -26,6 +27,7 @@ public class IntegrationTest {
 
         public interface Chapter {
             public String title();
+
             public String body();
         }
     }
@@ -88,7 +90,7 @@ public class IntegrationTest {
                 db.set(chapter1, "body", "Mr. Plumbean lived on a ...");
                 db.add(book, "chapters", chapter1);
 
-                return ImmutableList.of(book, author);
+                return Arrays.asList(book, author);
             }
         });
         bookId = ret.get(0);

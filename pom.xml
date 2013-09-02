@@ -7,12 +7,12 @@
         <version>7</version>
     </parent>
 
-    <groupId>net.avh4.data.per</groupId>
-    <artifactId>per</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <groupId>net.avh4.data</groupId>
+    <artifactId>datum</artifactId>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>per</name>
+    <name>perdata-datum</name>
     <description />
     <url />
     <licenses>
@@ -24,9 +24,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:https://github.com/avh4/perdata.git</connection>
-        <developerConnection>scm:git:git@github.com:avh4/perdata.git</developerConnection>
-        <url>https://github.com/avh4/perdata</url>
+        <connection>scm:git:https://github.com/avh4/perdata-datum.git</connection>
+        <developerConnection>scm:git:git@github.com:avh4/perdata-datum.git</developerConnection>
+        <url>https://github.com/avh4/perdata-datum</url>
     </scm>
 
     <developers>
@@ -42,7 +42,6 @@
 
         <java.version>1.6</java.version>
         <cucumber.version>1.1.1</cucumber.version>
-        <guava.version>14.0.1</guava.version>
         <hamcrest.version>1.2.1</hamcrest.version>
         <junit.version>4.11</junit.version>
         <mockito.version>1.9.5</mockito.version>
@@ -77,22 +76,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-
-        <!-- for per2 -->
-        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20090211</version>
-        </dependency>
-
-        <!-- for struct -->
-        <dependency>
-            <groupId>org.functionaljava</groupId>
-            <artifactId>functionaljava</artifactId>
-            <version>3.1</version>
         </dependency>
 
         <dependency>
@@ -131,21 +117,10 @@
             <version>1.4</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>

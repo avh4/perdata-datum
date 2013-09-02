@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All in per" type="JUnit" factoryName="JUnit">
-    <module name="per" />
+  <configuration default="false" name="All in datum" type="JUnit" factoryName="JUnit">
+    <module name="datum" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="PACKAGE_NAME" value="" />

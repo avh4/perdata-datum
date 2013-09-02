@@ -1,6 +1,6 @@
-[![Build Status](https://secure.travis-ci.org/avh4/perdata.png?branch=master)](http://travis-ci.org/avh4/perdata)
+[![Build Status](https://secure.travis-ci.org/avh4/perdata-datum.png?branch=master)](http://travis-ci.org/avh4/perdata-datum)
 
-## perdata
+## perdata-datum
 
 Experiments with persistent data APIs
 
