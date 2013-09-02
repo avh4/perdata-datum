@@ -1,23 +1,21 @@
 package net.avh4.data.per.features;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FarmAnimal implements Serializable {
-    private final @NotNull String name;
+    private final String name;
 
     private final int age;
 
-    public FarmAnimal(@NotNull String name, int age) {
+    public FarmAnimal(String name, int age) {
         checkNotNull(name);
         this.name = name;
         this.age = age;
     }
 
-    @NotNull public String getName() {
+    public String getName() {
         return name;
     }
 
