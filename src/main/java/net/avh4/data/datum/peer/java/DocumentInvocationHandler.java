@@ -3,7 +3,6 @@ package net.avh4.data.datum.peer.java;
 import net.avh4.data.datum.prim.Id;
 import net.avh4.data.datum.prim.KnownId;
 import net.avh4.data.datum.store.DatumStore;
-import org.json.JSONException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationHandler;
@@ -31,6 +30,7 @@ class DocumentInvocationHandler implements InvocationHandler {
         final String attribute_name = method.getName();
 
         if (attribute_name.equals("_id")) return entityId;
+        if (attribute_name.equals("toString")) return "Document:" + entityId.toString();
 
         if (returnType.isArray()) {
             final String[] storeValues = store.getArray(entityId, attribute_name);
