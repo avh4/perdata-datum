@@ -1,22 +1,17 @@
 package net.avh4.data.datum.store;
 
-import net.avh4.data.datum.prim.Datum;
-import net.avh4.data.datum.prim.Id;
-import net.avh4.data.datum.prim.KnownId;
 import net.avh4.data.datum.prim.TempId;
-
-import java.util.Iterator;
 
 public interface DatumStore {
     DatumStore createId(TempId id);
 
-    DatumStore set(Datum datum);
+    DatumStore set(String entityId, String action, String value);
 
-    String get(Id entityId, String action);
+    String get(String entityId, String action);
 
-    DatumStore add(Datum datum);
+    DatumStore addIndex(String action, String value, String entity);
 
-    String[] getArray(Id entityId, String action);
+    DatumStore removeIndex(String action, String value, String entityId);
 
-    Iterable<KnownId> iterate(String index, String startKey, String endKey);
+    Iterable<String> iterate(String index, String startKey, String endKey);
 }

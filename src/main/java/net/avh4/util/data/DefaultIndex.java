@@ -24,7 +24,9 @@ public class DefaultIndex<K extends Comparable<K>, V extends Comparable<V>> impl
     }
 
     @Override public DefaultIndex<K, V> remove(K key, V value) {
-        return this;
+        final IndexValue<K, V> iv = new IndexValue<K, V>(key, value);
+        final Set<IndexValue<K, V>> newSet = set.delete(iv);
+        return new DefaultIndex<K, V>(newSet);
     }
 
     @Override public Iterator<IndexValue<K, V>> iterator(K startKey, K endKey) {

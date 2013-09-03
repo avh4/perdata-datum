@@ -17,8 +17,8 @@ public class Query {
 
     public KnownId[] execute(DatumStore store) {
         ArrayList<KnownId> matches = new ArrayList<KnownId>();
-        for (KnownId id : store.iterate(index, value, value)) {
-            matches.add(id);
+        for (String id : store.iterate(index, value, value)) {
+            matches.add(new KnownId(id));
         }
         return matches.toArray(new KnownId[matches.size()]);
     }

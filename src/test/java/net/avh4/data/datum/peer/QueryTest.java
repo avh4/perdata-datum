@@ -16,7 +16,7 @@ import static org.mockito.Mockito.stub;
 public class QueryTest {
     private Query subject;
     @Mock private DatumStore store;
-    @Mock private KnownId matchingId;
+    private String matchingId = "__ID__";
 
     @Before
     public void setUp() throws Exception {
@@ -27,6 +27,6 @@ public class QueryTest {
 
     @Test
     public void execute_shouldReturnMatchingResults() throws Exception {
-        assertThat(subject.execute(store)).containsOnly(matchingId);
+        assertThat(subject.execute(store)).containsOnly(new KnownId(matchingId));
     }
 }

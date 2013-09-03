@@ -8,6 +8,7 @@ import net.avh4.data.datum.store.DatumStore;
 import net.avh4.data.datum.store.MemoryDatumStore;
 import net.avh4.data.datum.transact.LocalTransactor;
 import net.avh4.data.datum.transact.Transaction;
+import net.avh4.data.datum.transact.TransactionException;
 import net.avh4.data.datum.transact.Transactor;
 import org.junit.Before;
 import org.junit.Test;
@@ -93,7 +94,7 @@ public class IntegrationTest {
         assertThat(books[0].chapters()[1].body()).startsWith("He liked it that");
     }
 
-    private void createTestData() {
+    private void createTestData() throws TransactionException {
         final Id meta = new KnownId("integration:metadata");
         final TempId author = new TempId();
         {

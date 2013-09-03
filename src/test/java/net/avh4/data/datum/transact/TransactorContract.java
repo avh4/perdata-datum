@@ -1,10 +1,7 @@
 package net.avh4.data.datum.transact;
 
 import fj.data.List;
-import net.avh4.data.datum.prim.Datum;
-import net.avh4.data.datum.prim.Id;
-import net.avh4.data.datum.prim.KnownId;
-import net.avh4.data.datum.prim.TempId;
+import net.avh4.data.datum.prim.*;
 import net.avh4.data.datum.store.DatumStore;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
@@ -14,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verify;
 
@@ -37,6 +34,7 @@ public abstract class TransactorContract {
         temp2 = new TempId();
 
         stub(robot_loves_kitty.resolveTempIds(store)).toReturn(store);
+        stub(store.set(anyString(), anyString(), anyString())).toReturn(store);
 
         stub(txn.assertions()).toReturn(List.<Datum>nil());
         stub(txn.additions()).toReturn(List.<Datum>nil());
@@ -46,16 +44,16 @@ public abstract class TransactorContract {
 
     @Test
     public void shouldWriteNewAssertions() throws Exception {
-        stub(txn.assertions()).toReturn(Arrays.asList(robot_loves_kitty));
+        stub(txn.assertions()).toReturn(Arrays.<Datum>asList(new ValueDatum(new KnownId("robot"), "loves", "kitty")));
         subject.transact(txn);
-        verify(store).set(robot_loves_kitty);
+        verify(store).set("robot", "loves", "kitty");
     }
 
     @Test
     public void shouldWriteNewAdditions() throws Exception {
-        stub(txn.additions()).toReturn(Arrays.asList(robot_loves_kitty));
+        stub(txn.additions()).toReturn(Arrays.<Datum>asList(new ValueDatum(new KnownId("robot"), "loves", "kitty")));
         subject.transact(txn);
-        verify(store).add(robot_loves_kitty);
+        verify(store).set("robot", "loves", "[\"kitty\"]");
     }
 
     @Test

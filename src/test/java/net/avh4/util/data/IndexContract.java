@@ -23,6 +23,13 @@ public abstract class IndexContract {
     }
 
     @Test
+    public void iteratesSkipsRemovedValues() throws Exception {
+        subject = subject.add("Arnold", "Arnold Palmer");
+        subject = subject.remove("Arnold", "Arnold Palmer");
+        assertThat(subject.iterator("Arnold", "Arnold")).isEmpty();
+    }
+
+    @Test
     public void iterator_skipsToMatchingValues() throws Exception {
         subject = subject.add("Arnold", "Arnold Palmer").add("Betty", "Betty White");
         assertThat(subject.iterator("Betty", "Betty")).containsOnly(new IndexValue("Betty", "Betty White"));

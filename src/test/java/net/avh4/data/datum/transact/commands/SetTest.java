@@ -1,0 +1,43 @@
+package net.avh4.data.datum.transact.commands;
+
+import net.avh4.data.datum.store.DatumStore;
+import net.avh4.data.datum.store.MemoryDatumStore;
+import net.avh4.test.junit.Nested;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.verify;
+
+@RunWith(Nested.class)
+public class SetTest {
+    private Set subject;
+    private DatumStore store;
+
+    @Before
+    public void setUp() throws Exception {
+        store = new MemoryDatumStore();
+        subject = new Set("robot", "loves", "kitty");
+    }
+
+    @Test
+    public void shouldStoreValue() throws Exception {
+        store = subject.execute(store);
+        assertThat(store.get("robot", "loves")).isEqualTo("kitty");
+    }
+
+    @Test
+    public void shouldAddIndex() throws Exception {
+        store = subject.execute(store);
+        assertThat(store.iterate("loves", "kitty", "kitty")).containsOnly("robot");
+    }
+
+    @Test
+    public void withPreviousValue_shouldRemoveOldIndex() throws Exception {
+        store = store.set("robot", "loves", "doggy");
+        store = subject.execute(store);
+        assertThat(store.iterate("loves", "doggy", "doggy")).isEmpty();
+    }
+}
