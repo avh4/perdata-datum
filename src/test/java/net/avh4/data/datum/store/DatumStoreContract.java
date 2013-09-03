@@ -11,7 +11,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public abstract class DatumStoreContract {
     private DatumStore subject;
-    private Id id1;
+    private Id id1, id2, id3, id4;
     private TempId a;
     private TempId b;
 
@@ -20,6 +20,9 @@ public abstract class DatumStoreContract {
     @Before
     public void setUp() throws Exception {
         id1 = new KnownId("1");
+        id2 = new KnownId("2");
+        id3 = new KnownId("3");
+        id4 = new KnownId("4");
         a = new TempId();
         b = new TempId();
         subject = createSubject();
@@ -56,20 +59,20 @@ public abstract class DatumStoreContract {
 
     @Test
     public void get_shouldReturnStoredValue() throws Exception {
-        subject = subject.write(new ValueDatum(id1, "hasColor", "blue"));
+        subject = subject.set(new ValueDatum(id1, "hasColor", "blue"));
         assertThat(subject.get(id1, "hasColor")).isEqualTo("blue");
     }
 
     @Test
     public void write_shouldReplaceValues() throws Exception {
-        subject = subject.write(new ValueDatum(id1, "hasColor", "blue"));
-        subject = subject.write(new ValueDatum(id1, "hasColor", "red"));
+        subject = subject.set(new ValueDatum(id1, "hasColor", "blue"));
+        subject = subject.set(new ValueDatum(id1, "hasColor", "red"));
         assertThat(subject.get(id1, "hasColor")).isEqualTo("red");
     }
 
     @Test
     public void write_shouldNotModifyOriginalStore() throws Exception {
-        subject.write(new ValueDatum(id1, "hasColor", "blue"));
+        subject.set(new ValueDatum(id1, "hasColor", "blue"));
         assertThat(subject.get(id1, "hasColor")).isNull();
     }
 
@@ -95,5 +98,23 @@ public abstract class DatumStoreContract {
     public void add_shouldNotModifyOriginalStore() throws Exception {
         subject.add(new ValueDatum(id1, "watches", "House M.D."));
         assertThat(subject.getArray(id1, "watches")).isEmpty();
+    }
+
+    @Test
+    public void iterate_whenAllValuesMatch_shouldReturnMatchingValues() throws Exception {
+        subject = subject.set(new ValueDatum(id1, "name", "Aaron"));
+        subject = subject.set(new ValueDatum(id2, "name", "Betty"));
+
+        assertThat(subject.iterate("name", "Aaron", "Betty")).containsOnly(id1, id2);
+    }
+
+    @Test
+    public void iterate_shouldReturnMatchingValues() throws Exception {
+        subject = subject.set(new ValueDatum(id1, "name", "Aaron"));
+        subject = subject.set(new ValueDatum(id2, "name", "Betty"));
+        subject = subject.set(new ValueDatum(id3, "name", "Charlie"));
+        subject = subject.set(new ValueDatum(id4, "name", "Debra"));
+
+        assertThat(subject.iterate("name", "Betty", "Charlie")).containsOnly(id2, id3);
     }
 }

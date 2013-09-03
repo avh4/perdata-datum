@@ -14,7 +14,7 @@ public class LocalTransactor implements Transactor {
         DatumStore store = this.store;
         for (Datum datum : transaction.assertions()) {
             store = datum.resolveTempIds(store);
-            store = store.write(datum);
+            store = store.set(datum);
         }
         for (Datum datum : transaction.additions()) {
             store = datum.resolveTempIds(store);

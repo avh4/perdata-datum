@@ -2,7 +2,7 @@ package net.avh4.data.datum;
 
 import net.avh4.data.datum.peer.java.DatabaseImpl;
 import net.avh4.data.datum.peer.java.DirectAccess;
-import net.avh4.data.datum.peer.java.Query;
+import net.avh4.data.datum.peer.java.JavaQuery;
 import net.avh4.data.datum.prim.*;
 import net.avh4.data.datum.store.DatumStore;
 import net.avh4.data.datum.store.MemoryDatumStore;
@@ -10,7 +10,6 @@ import net.avh4.data.datum.transact.LocalTransactor;
 import net.avh4.data.datum.transact.Transaction;
 import net.avh4.data.datum.transact.Transactor;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
@@ -21,7 +20,6 @@ public class IntegrationTest {
     private Transactor transactor;
     private TempId bookId;
     private DatumStore store;
-    private Query query;
     private DirectAccess direct;
 
     public interface Book {
@@ -54,7 +52,6 @@ public class IntegrationTest {
         pico.addComponent(MemoryDatumStore.class);
         store = pico.getComponent(DatumStore.class);
         transactor = pico.getComponent(Transactor.class);
-        query = pico.getComponent(Query.class);
         direct = pico.getComponent(DirectAccess.class);
     }
 
@@ -78,11 +75,12 @@ public class IntegrationTest {
         assertThat(book.chapters()[1].body()).startsWith("He liked it that");
     }
 
-    @Test @Ignore
+    @Test
     public void testQuery() throws Exception {
         createTestData();
 
-        Book[] books = query.query(store, Book.class);
+        JavaQuery<Book> q = new JavaQuery<Book>(Book.class, "db:type", "book");
+        Book[] books = q.execute(store);
         assertThat(books).isNotNull().hasSize(1).hasAllElementsOfType(Book.class);
 
         assertThat(books[0].title()).isNotNull().isEqualTo("The Big Orange Splot");
@@ -104,6 +102,7 @@ public class IntegrationTest {
             Transaction t1 = new Transaction()
                     .set(new ValueDatum(meta, "attempts", "1"))
 
+                    .set(new ValueDatum(bookId, "db:type", "book"))
                     .set(new ValueDatum(bookId, "title", "The Big Orange Splot"))
 
                     .set(new ValueDatum(author, "name", "Daniel Pinkwater"))

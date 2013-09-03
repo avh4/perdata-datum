@@ -48,7 +48,7 @@ public abstract class TransactorContract {
     public void shouldWriteNewAssertions() throws Exception {
         stub(txn.assertions()).toReturn(Arrays.asList(robot_loves_kitty));
         subject.transact(txn);
-        verify(store).write(robot_loves_kitty);
+        verify(store).set(robot_loves_kitty);
     }
 
     @Test
