@@ -24,27 +24,27 @@ public class BTreeTest {
 
     @Test
     public void insertRoot() throws Exception {
-        BTree t = this.t.insert("M", "em");
+        t = t.insert("M", "em");
         assertNode(t, 0, "M", "em");
     }
 
     @Test
     public void insertLeft() throws Exception {
-        BTree t = this.t.insert("M", "em").insert("A", "ay");
+        t = t.insert("M", "em").insert("A", "ay");
         assertNode(t, 0, "A", "ay");
         assertNode(t, 1, "M", "em");
     }
 
     @Test
     public void insertRight() throws Exception {
-        BTree t = this.t.insert("M", "em").insert("Z", "zee");
+        t = t.insert("M", "em").insert("Z", "zee");
         assertNode(t, 0, "M", "em");
         assertNode(t, 1, "Z", "zee");
     }
 
     @Test
     public void insertLeftLeft() throws Exception {
-        BTree t = this.t.insert("M", "em").insert("B", "bee").insert("A", "ay");
+        t = t.insert("M", "em").insert("B", "bee").insert("A", "ay");
         assertNode(t, 0, "A", "ay");
         assertNode(t, 1, "B", "bee");
         assertNode(t, 2, "M", "em");
@@ -52,7 +52,7 @@ public class BTreeTest {
 
     @Test
     public void insertLeftRight() throws Exception {
-        BTree t = this.t.insert("M", "em").insert("A", "ay").insert("B", "bee");
+        t = t.insert("M", "em").insert("A", "ay").insert("B", "bee");
         assertNode(t, 0, "A", "ay");
         assertNode(t, 1, "B", "bee");
         assertNode(t, 2, "M", "em");
@@ -60,7 +60,7 @@ public class BTreeTest {
 
     @Test
     public void insertRightRight() throws Exception {
-        BTree t = this.t.insert("M", "em").insert("Y", "wye").insert("Z", "zee");
+        t = t.insert("M", "em").insert("Y", "wye").insert("Z", "zee");
         assertNode(t, 0, "M", "em");
         assertNode(t, 1, "Y", "wye");
         assertNode(t, 2, "Z", "zee");
@@ -68,7 +68,7 @@ public class BTreeTest {
 
     @Test
     public void splitOnNewKey() throws Exception {
-        BTree t = this.t.insert("A", "ay").insert("B", "bee").insert("D", "dee").insert("E", "ee");
+        t = t.insert("A", "ay").insert("B", "bee").insert("D", "dee").insert("E", "ee");
         t = t.insert("C", "cee");
         assertNode(t, 0, "D");
         assertNode(t.node(0), 0, "A", "ay");
