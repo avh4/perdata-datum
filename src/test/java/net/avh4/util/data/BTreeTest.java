@@ -70,7 +70,7 @@ public class BTreeTest {
     public void splitOnNewKey() throws Exception {
         BTree t = this.t.insert("A", "ay").insert("B", "bee").insert("D", "dee").insert("E", "ee");
         t = t.insert("C", "cee");
-        assertNode(t, 0, "C");
+        assertNode(t, 0, "D");
         assertNode(t.node(0), 0, "A", "ay");
         assertNode(t.node(0), 1, "B", "bee");
         assertNode(t.node(0), 2, "C", "cee");
@@ -82,12 +82,24 @@ public class BTreeTest {
     public void splitWithNewKeyLeft() throws Exception {
         t = t.insert("B", "bee").insert("C", "cee").insert("D", "dee").insert("E", "ee");
         t = t.insert("A", "ay");
-        assertNode(t, 0, "C");
+        assertNode(t, 0, "D");
         assertNode(t.node(0), 0, "A", "ay");
         assertNode(t.node(0), 1, "B", "bee");
         assertNode(t.node(0), 2, "C", "cee");
         assertNode(t.node(1), 0, "D", "dee");
         assertNode(t.node(1), 1, "E", "ee");
+    }
+
+    @Test
+    public void splitWithNewKeyRight() throws Exception {
+        t = t.insert("A", "ay").insert("B", "bee").insert("C", "cee").insert("D", "dee");
+        t = t.insert("E", "ee");
+        assertNode(t, 0, "C");
+        assertNode(t.node(0), 0, "A", "ay");
+        assertNode(t.node(0), 1, "B", "bee");
+        assertNode(t.node(1), 0, "C", "cee");
+        assertNode(t.node(1), 1, "D", "dee");
+        assertNode(t.node(1), 2, "E", "ee");
     }
 
     private void assertNode(BTree t, int i, String key) {

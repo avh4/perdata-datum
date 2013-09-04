@@ -64,10 +64,16 @@ public class BTree {
 
         String[] keys = new String[d * 2];
         long[] nodes = new long[d * 2 + 1];
-        final BTree left = new BTree(storage, leftKeys, leftVals).insert(key, value);
+        BTree left = new BTree(storage, leftKeys, leftVals);
+        BTree right = new BTree(storage, rightKeys, rightVals);
+        if (key.compareTo(rightKeys[0]) >= 0) {
+            right = right.insert(key, value);
+        } else {
+            left = left.insert(key, value);
+        }
         nodes[0] = storage.write(left);
-        nodes[1] = storage.write(new BTree(storage, rightKeys, rightVals));
-        keys[0] = left.keys[d];
+        nodes[1] = storage.write(right);
+        keys[0] = right.keys[0];
         return new BTree(storage, keys, nodes, null);
     }
 
