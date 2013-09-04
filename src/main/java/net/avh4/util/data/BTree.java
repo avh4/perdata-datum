@@ -27,16 +27,17 @@ public class BTree {
     public BTree insert(String key, String value) {
         final String[] keys = this.keys.clone();
         final String[] vals = this.vals.clone();
-        int insertAt;
-        for (insertAt = 0; insertAt < keys.length; insertAt++) {
-            if (keys[insertAt] == null || key.compareTo(keys[insertAt]) < 0) break;
+        int i;
+        for (i = keys.length - 1; i > 0; i--) {
+            if (keys[i-1] == null || key.compareTo(keys[i-1]) < 0) {
+                keys[i] = keys[i - 1];
+                vals[i] = vals[i - 1];
+            } else {
+                break;
+            }
         }
-        for (int i = keys.length - 1; i > insertAt; i--) {
-            keys[i] = keys[i - 1];
-            vals[i] = vals[i - 1];
-        }
-        keys[insertAt] = key;
-        vals[insertAt] = value;
+        keys[i] = key;
+        vals[i] = value;
         return new BTree(storage, keys, nodes, vals);
     }
 
