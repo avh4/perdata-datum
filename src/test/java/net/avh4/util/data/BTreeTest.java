@@ -60,6 +60,23 @@ public class BTreeTest {
         assertNode(t, 2, "Z", "zee");
     }
 
+    @Test
+    public void split() throws Exception {
+        BTree t = subject.insert("A", "ay").insert("B", "bee").insert("D", "dee").insert("E", "ee");
+        t = t.insert("C", "cee");
+        assertNode(t, 0, "C");
+        assertNode(t.node(0), 0, "A", "ay");
+        assertNode(t.node(0), 1, "B", "bee");
+        assertNode(t.node(0), 2, "C", "cee");
+        assertNode(t.node(1), 0, "D", "dee");
+        assertNode(t.node(1), 1, "E", "ee");
+    }
+
+    private void assertNode(BTree t, int i, String key) {
+        assertThat(t.keys[i]).isEqualTo(key);
+        assertThat(t.vals).isNull();
+    }
+
     private void assertNode(BTree t, int i, String key, String val) {
         assertThat(t.keys[i]).isEqualTo(key);
         assertThat(t.vals[i]).isEqualTo(val);
