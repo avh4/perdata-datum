@@ -29,10 +29,16 @@ public class BTree {
 
     public BTree insert(String key, String value) {
         if (vals == null) {
-            BTree left = storage.get(nodes[0]).insert(key, value);
-            nodes[0] = storage.write(left);
-            return new BTree(storage, keys, nodes);
-        }  else if (keys[keys.length - 1] != null) {
+            if (key.compareTo(keys[0]) >= 0) {
+                BTree right = storage.get(nodes[1]).insert(key, value);
+                nodes[1] = storage.write(right);
+                return new BTree(storage, keys, nodes);
+            } else {
+                BTree left = storage.get(nodes[0]).insert(key, value);
+                nodes[0] = storage.write(left);
+                return new BTree(storage, keys, nodes);
+            }
+        } else if (keys[keys.length - 1] != null) {
             return split(key, value);
         } else {
             return insertHere(key, value);
