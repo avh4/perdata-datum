@@ -1,7 +1,11 @@
 package net.avh4.util.data;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 
 import java.util.HashMap;
 
@@ -9,6 +13,8 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class BTreeTest {
     private BTree t;
+
+    @Rule public PrintFailedTree rule = new PrintFailedTree();
 
     @Before
     public void setUp() throws Exception {
@@ -108,6 +114,21 @@ public class BTreeTest {
         @Override public BTree get(long id) {
             if (!map.containsKey(id)) throw new RuntimeException("Requested page " + id + " was never written");
             return map.get(id);
+        }
+    }
+
+    private class PrintFailedTree implements TestRule {
+        @Override public Statement apply(final Statement base, final Description description) {
+            return new Statement() {
+                @Override public void evaluate() throws Throwable {
+                    try {
+                        base.evaluate();
+                    } catch (AssertionError e) {
+                        System.out.println(description + " failed with: \n  t = " + t);
+                        throw e;
+                    }
+                }
+            };
         }
     }
 }
