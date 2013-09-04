@@ -13,13 +13,6 @@ public class BTree {
         vals = new String[d * 2];
     }
 
-    public BTree(BTreeStorage storage, String[] keys, long[] nodes, String[] vals) {
-        this.storage = storage;
-        this.keys = keys;
-        this.nodes = nodes;
-        this.vals = vals;
-    }
-
     public BTree(BTreeStorage storage, String[] keys, String[] vals) {
         this.storage = storage;
         this.keys = keys;
@@ -27,11 +20,18 @@ public class BTree {
         this.vals = vals;
     }
 
+    public BTree(BTreeStorage storage, String[] keys, long[] nodes) {
+        this.storage = storage;
+        this.keys = keys;
+        this.nodes = nodes;
+        this.vals = null;
+    }
+
     public BTree insert(String key, String value) {
         if (vals == null) {
             BTree left = storage.get(nodes[0]).insert(key, value);
             nodes[0] = storage.write(left);
-            return new BTree(storage, keys, nodes, null);
+            return new BTree(storage, keys, nodes);
         }  else if (keys[keys.length - 1] != null) {
             return split(key, value);
         } else {
@@ -51,7 +51,7 @@ public class BTree {
         }
         keys[i] = key;
         vals[i] = value;
-        return new BTree(storage, keys, nodes, vals);
+        return new BTree(storage, keys, vals);
     }
 
     private BTree split(String key, String value) {
@@ -78,7 +78,7 @@ public class BTree {
         nodes[0] = storage.write(left);
         nodes[1] = storage.write(right);
         keys[0] = right.keys[0];
-        return new BTree(storage, keys, nodes, null);
+        return new BTree(storage, keys, nodes);
     }
 
     public BTree insert(String key) {
