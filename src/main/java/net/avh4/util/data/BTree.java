@@ -41,8 +41,12 @@ public class BTree {
                 vals[0] = value;
                 return new BTree(storage, keys, nodes, vals);
             } else {
-                keys[2] = keys[1]; keys[1] = key;
-                vals[2] = vals[1]; vals[1] = value;
+                for (int i = keys.length - 1; i > 1; i--) {
+                    keys[i] = keys[i - 1];
+                    vals[i] = vals[i - 1];
+                }
+                keys[1] = key;
+                vals[1] = value;
                 return new BTree(storage, keys, nodes, vals);
             }
         }
