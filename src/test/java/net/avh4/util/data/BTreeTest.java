@@ -114,6 +114,19 @@ public class BTreeTest {
         assertNode(t.node(1), 2, "D", "dee");
     }
 
+    @Test
+    public void insertLeftChildLeft() throws Exception {
+        t = t.insert("B", "bee").insert("C", "cee").insert("D", "dee").insert("E", "ee").insert("F", "ef");
+        t = t.insert("A", "ay");
+        assertNode(t, 0, "D");
+        assertNode(t.node(0), 0, "A", "ay");
+        assertNode(t.node(0), 1, "B", "bee");
+        assertNode(t.node(0), 2, "C", "cee");
+        assertNode(t.node(1), 0, "D", "dee");
+        assertNode(t.node(1), 1, "E", "ee");
+        assertNode(t.node(1), 2, "F", "ef");
+    }
+
     private void assertNode(BTree t, int i, String key) {
         assertThat(t.keys[i]).isEqualTo(key);
         assertThat(t.vals).isNull();
