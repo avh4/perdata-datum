@@ -13,14 +13,14 @@ public class BTree {
         vals = new String[d * 2];
     }
 
-    public BTree(BTreeStorage storage, String[] keys, String[] vals) {
+    protected BTree(BTreeStorage storage, String[] keys, String[] vals) {
         this.storage = storage;
         this.keys = keys;
         this.nodes = null;
         this.vals = vals;
     }
 
-    public BTree(BTreeStorage storage, String[] keys, long[] nodes) {
+    protected BTree(BTreeStorage storage, String[] keys, long[] nodes) {
         this.storage = storage;
         this.keys = keys;
         this.nodes = nodes;
