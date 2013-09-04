@@ -28,9 +28,9 @@ public class BTree {
         final String[] keys = this.keys.clone();
         final String[] vals = this.vals.clone();
         int insertAt;
-        if (keys[0] == null || key.compareTo(keys[0]) < 0) insertAt = 0;
-        else if (keys[1] == null || key.compareTo(keys[1]) < 0) insertAt = 1;
-        else insertAt = 2;
+        for (insertAt = 0; insertAt < keys.length; insertAt++) {
+            if (keys[insertAt] == null || key.compareTo(keys[insertAt]) < 0) break;
+        }
         for (int i = keys.length - 1; i > insertAt; i--) {
             keys[i] = keys[i - 1];
             vals[i] = vals[i - 1];
