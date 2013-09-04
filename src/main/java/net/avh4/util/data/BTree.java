@@ -1,7 +1,5 @@
 package net.avh4.util.data;
 
-import java.util.Arrays;
-
 public class BTree {
     private final BTreeStorage storage;
     public final String[] keys;
@@ -83,6 +81,29 @@ public class BTree {
     }
 
     @Override public String toString() {
-        return Arrays.toString(keys);
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < keys.length; i++) {
+            if (nodes != null) {
+                if (nodes[i] == 0) {
+                    sb.append("[]");
+                } else {
+                    sb.append(nodes[i]);
+                    sb.append(":");
+                    sb.append(storage.get(nodes[i]).toString());
+                }
+            }
+            sb.append(" ");
+            if (keys[i] != null) {
+                sb.append(keys[i]);
+                if (vals != null) {
+                    sb.append(vals[i] == null ? "." : "*");
+                }
+            } else {
+                sb.append(".");
+            }
+            sb.append(" ");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }
