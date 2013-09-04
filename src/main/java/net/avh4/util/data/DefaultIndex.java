@@ -7,7 +7,7 @@ import fj.data.Set;
 import java.util.Iterator;
 
 public class DefaultIndex<K extends Comparable<K>, V extends Comparable<V>> implements Index<K, V> {
-    final Set<IndexValue<K, V>> set;
+    private final Set<IndexValue<K, V>> set;
 
     public DefaultIndex() {
         this(Set.empty(IndexValue.<K, V>ord()));
