@@ -46,6 +46,14 @@ public class BTreeTest {
         assertNode(t, 2, "M", "em");
     }
 
+    @Test
+    public void insertLeftRight() throws Exception {
+        BTree t = subject.insert("M", "em").insert("A", "ay").insert("B", "bee");
+        assertNode(t, 0, "A", "ay");
+        assertNode(t, 1, "B", "bee");
+        assertNode(t, 2, "M", "em");
+    }
+
     private void assertNode(BTree t, int i, String key, String val) {
         assertThat(t.keys[i]).isEqualTo(key);
         assertThat(t.vals[i]).isEqualTo(val);

@@ -41,8 +41,8 @@ public class BTree {
                 vals[0] = value;
                 return new BTree(storage, keys, nodes, vals);
             } else {
-                keys[1] = key;
-                vals[1] = value;
+                keys[2] = keys[1]; keys[1] = key;
+                vals[2] = vals[1]; vals[1] = value;
                 return new BTree(storage, keys, nodes, vals);
             }
         }
