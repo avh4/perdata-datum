@@ -32,23 +32,16 @@ public class BTree {
             vals[0] = value;
             return new BTree(storage, keys, nodes, vals);
         } else {
-            if (key.compareTo(keys[0]) < 0) {
-                for (int i = keys.length - 1; i > 0; i--) {
-                    keys[i] = keys[i - 1];
-                    vals[i] = vals[i - 1];
-                }
-                keys[0] = key;
-                vals[0] = value;
-                return new BTree(storage, keys, nodes, vals);
-            } else {
-                for (int i = keys.length - 1; i > 1; i--) {
-                    keys[i] = keys[i - 1];
-                    vals[i] = vals[i - 1];
-                }
-                keys[1] = key;
-                vals[1] = value;
-                return new BTree(storage, keys, nodes, vals);
+            int insertAt;
+            if (key.compareTo(keys[0]) < 0) insertAt = 0;
+            else insertAt = 1;
+            for (int i = keys.length - 1; i > insertAt; i--) {
+                keys[i] = keys[i - 1];
+                vals[i] = vals[i - 1];
             }
+            keys[insertAt] = key;
+            vals[insertAt] = value;
+            return new BTree(storage, keys, nodes, vals);
         }
     }
 
