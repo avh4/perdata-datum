@@ -22,10 +22,6 @@ public class BTree {
         this.vals = vals;
     }
 
-    public static net.avh4.util.data.BTree empty() {
-        return null;
-    }
-
     public BTree insert(String key, String value) {
         final String[] keys = this.keys.clone();
         final String[] vals = this.vals.clone();
