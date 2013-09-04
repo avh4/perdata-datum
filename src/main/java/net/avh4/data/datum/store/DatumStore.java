@@ -1,6 +1,6 @@
 package net.avh4.data.datum.store;
 
-import net.avh4.data.datum.prim.TempId;
+import net.avh4.data.datum.primitives.TempId;
 
 public interface DatumStore {
     DatumStore createId(TempId id);

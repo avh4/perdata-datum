@@ -1,7 +1,7 @@
 package net.avh4.data.datum.transact;
 
 import fj.data.List;
-import net.avh4.data.datum.prim.Id;
+import net.avh4.data.datum.primitives.Id;
 import net.avh4.data.datum.transact.commands.*;
 
 public class Transaction {

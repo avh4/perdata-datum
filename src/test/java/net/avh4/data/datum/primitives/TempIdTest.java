@@ -1,6 +1,5 @@
-package net.avh4.data.datum.prim;
+package net.avh4.data.datum.primitives;
 
-import net.avh4.data.datum.prim.TempId;
 import net.avh4.data.datum.store.DatumStore;
 import org.junit.Before;
 import org.junit.Test;

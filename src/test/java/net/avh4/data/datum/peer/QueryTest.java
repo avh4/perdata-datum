@@ -1,7 +1,6 @@
 package net.avh4.data.datum.peer;
 
-import net.avh4.data.datum.prim.Id;
-import net.avh4.data.datum.prim.KnownId;
+import net.avh4.data.datum.primitives.KnownId;
 import net.avh4.data.datum.store.DatumStore;
 import org.junit.Before;
 import org.junit.Test;

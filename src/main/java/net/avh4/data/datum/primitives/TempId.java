@@ -1,4 +1,4 @@
-package net.avh4.data.datum.prim;
+package net.avh4.data.datum.primitives;
 
 import net.avh4.data.datum.store.DatumStore;
 

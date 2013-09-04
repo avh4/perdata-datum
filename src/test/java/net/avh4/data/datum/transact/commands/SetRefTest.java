@@ -1,7 +1,7 @@
 package net.avh4.data.datum.transact.commands;
 
-import net.avh4.data.datum.prim.Id;
-import net.avh4.data.datum.prim.KnownId;
+import net.avh4.data.datum.primitives.Id;
+import net.avh4.data.datum.primitives.KnownId;
 import net.avh4.data.datum.store.DatumStore;
 import net.avh4.data.datum.store.MemoryDatumStore;
 import net.avh4.test.junit.Nested;

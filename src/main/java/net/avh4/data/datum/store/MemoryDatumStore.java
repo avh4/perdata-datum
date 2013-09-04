@@ -3,7 +3,7 @@ package net.avh4.data.datum.store;
 import fj.F;
 import fj.Ord;
 import fj.data.TreeMap;
-import net.avh4.data.datum.prim.TempId;
+import net.avh4.data.datum.primitives.TempId;
 import net.avh4.util.IteratorIterable;
 import net.avh4.util.TransformingIterator;
 import net.avh4.util.data.DefaultIndex;

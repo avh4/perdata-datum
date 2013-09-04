@@ -3,7 +3,7 @@ package net.avh4.data.datum;
 import net.avh4.data.datum.peer.java.DatabaseImpl;
 import net.avh4.data.datum.peer.java.DirectAccess;
 import net.avh4.data.datum.peer.java.JavaQuery;
-import net.avh4.data.datum.prim.*;
+import net.avh4.data.datum.primitives.*;
 import net.avh4.data.datum.store.DatumStore;
 import net.avh4.data.datum.store.MemoryDatumStore;
 import net.avh4.data.datum.transact.LocalTransactor;

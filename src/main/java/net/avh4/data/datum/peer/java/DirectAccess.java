@@ -1,6 +1,6 @@
 package net.avh4.data.datum.peer.java;
 
-import net.avh4.data.datum.prim.Id;
+import net.avh4.data.datum.primitives.Id;
 import net.avh4.data.datum.store.DatumStore;
 
 public interface DirectAccess {

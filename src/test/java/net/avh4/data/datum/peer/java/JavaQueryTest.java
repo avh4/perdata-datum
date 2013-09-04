@@ -1,7 +1,7 @@
 package net.avh4.data.datum.peer.java;
 
 import net.avh4.data.datum.peer.Query;
-import net.avh4.data.datum.prim.KnownId;
+import net.avh4.data.datum.primitives.KnownId;
 import net.avh4.data.datum.store.DatumStore;
 import org.junit.Before;
 import org.junit.Test;

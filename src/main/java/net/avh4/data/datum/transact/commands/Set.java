@@ -1,10 +1,8 @@
 package net.avh4.data.datum.transact.commands;
 
-import net.avh4.data.datum.prim.Id;
+import net.avh4.data.datum.primitives.Id;
 import net.avh4.data.datum.store.DatumStore;
 import net.avh4.data.datum.transact.Command;
-import net.avh4.data.datum.transact.IndexStore;
-import net.avh4.data.datum.transact.KeyStore;
 import net.avh4.data.datum.transact.TransactionException;
 
 public class Set implements Command {
