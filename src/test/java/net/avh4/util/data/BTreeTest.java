@@ -80,6 +80,7 @@ public class BTreeTest {
     private void assertNode(BTree t, int i, String key, String val) {
         assertThat(t.keys[i]).isEqualTo(key);
         assertThat(t.vals[i]).isEqualTo(val);
+        assertThat(t.nodes).isNull();
     }
 
     private static class TestBTreeStorage implements BTreeStorage {

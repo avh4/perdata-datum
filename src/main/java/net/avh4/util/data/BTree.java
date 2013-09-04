@@ -11,7 +11,7 @@ public class BTree {
     public BTree(BTreeStorage storage, int d) {
         this.storage = storage;
         keys = new String[d * 2];
-        nodes = new long[d * 2];
+        nodes = null;
         vals = new String[d * 2];
     }
 
@@ -25,7 +25,7 @@ public class BTree {
     public BTree(BTreeStorage storage, String[] keys, String[] vals) {
         this.storage = storage;
         this.keys = keys;
-        this.nodes = new long[keys.length + 1];
+        this.nodes = null;
         this.vals = vals;
     }
 
