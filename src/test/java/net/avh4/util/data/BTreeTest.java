@@ -8,37 +8,37 @@ import java.util.HashMap;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class BTreeTest {
-    private BTree subject;
+    private BTree t;
 
     @Before
     public void setUp() throws Exception {
         TestBTreeStorage storage = new TestBTreeStorage();
-        subject = new BTree(storage, 2);
+        t = new BTree(storage, 2);
     }
 
     @Test
     public void insertRoot() throws Exception {
-        BTree t = subject.insert("M", "em");
+        BTree t = this.t.insert("M", "em");
         assertNode(t, 0, "M", "em");
     }
 
     @Test
     public void insertLeft() throws Exception {
-        BTree t = subject.insert("M", "em").insert("A", "ay");
+        BTree t = this.t.insert("M", "em").insert("A", "ay");
         assertNode(t, 0, "A", "ay");
         assertNode(t, 1, "M", "em");
     }
 
     @Test
     public void insertRight() throws Exception {
-        BTree t = subject.insert("M", "em").insert("Z", "zee");
+        BTree t = this.t.insert("M", "em").insert("Z", "zee");
         assertNode(t, 0, "M", "em");
         assertNode(t, 1, "Z", "zee");
     }
 
     @Test
     public void insertLeftLeft() throws Exception {
-        BTree t = subject.insert("M", "em").insert("B", "bee").insert("A", "ay");
+        BTree t = this.t.insert("M", "em").insert("B", "bee").insert("A", "ay");
         assertNode(t, 0, "A", "ay");
         assertNode(t, 1, "B", "bee");
         assertNode(t, 2, "M", "em");
@@ -46,7 +46,7 @@ public class BTreeTest {
 
     @Test
     public void insertLeftRight() throws Exception {
-        BTree t = subject.insert("M", "em").insert("A", "ay").insert("B", "bee");
+        BTree t = this.t.insert("M", "em").insert("A", "ay").insert("B", "bee");
         assertNode(t, 0, "A", "ay");
         assertNode(t, 1, "B", "bee");
         assertNode(t, 2, "M", "em");
@@ -54,15 +54,15 @@ public class BTreeTest {
 
     @Test
     public void insertRightRight() throws Exception {
-        BTree t = subject.insert("M", "em").insert("Y", "wye").insert("Z", "zee");
+        BTree t = this.t.insert("M", "em").insert("Y", "wye").insert("Z", "zee");
         assertNode(t, 0, "M", "em");
         assertNode(t, 1, "Y", "wye");
         assertNode(t, 2, "Z", "zee");
     }
 
     @Test
-    public void split() throws Exception {
-        BTree t = subject.insert("A", "ay").insert("B", "bee").insert("D", "dee").insert("E", "ee");
+    public void splitOnNewKey() throws Exception {
+        BTree t = this.t.insert("A", "ay").insert("B", "bee").insert("D", "dee").insert("E", "ee");
         t = t.insert("C", "cee");
         assertNode(t, 0, "C");
         assertNode(t.node(0), 0, "A", "ay");
