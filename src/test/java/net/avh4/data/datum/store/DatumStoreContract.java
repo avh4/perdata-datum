@@ -121,7 +121,7 @@ public abstract class DatumStoreContract {
         subject = subject.addIndex("name", "Betty", id2);
         subject = subject.removeIndex("name", "Aaron", id1);
 
-        assertThat(subject.iterate("name", "Aaron", "Betty")).containsOnly( id2);
+        assertThat(subject.iterate("name", "Aaron", "Betty")).containsOnly(id2);
     }
 
 

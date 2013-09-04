@@ -41,7 +41,6 @@ public class FjSetIndex<K extends Comparable<K>, V extends Comparable<V>> implem
         if (split._2().isSome()) matches = matches.insert(split._2().some());
 
         //noinspection unchecked
-        return (Iterator<IndexEntry<K,V>>)(Iterator<? extends IndexEntry<K,V>>)matches.iterator();
+        return (Iterator<IndexEntry<K, V>>) (Iterator<? extends IndexEntry<K, V>>) matches.iterator();
     }
-
 }

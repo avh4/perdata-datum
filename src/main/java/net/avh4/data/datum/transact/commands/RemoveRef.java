@@ -36,7 +36,7 @@ public class RemoveRef implements Command {
             }
             if (found == 0) throw new TransactionException("Array element does not exist: " + value);
             if (newArray.length() == 0) store = store.set(entityId, action, null);
-            else store = store.set(entityId, action,  newArray.toString());
+            else store = store.set(entityId, action, newArray.toString());
             if (found <= 1) store = store.removeIndex(action, value, entityId);
         } catch (JSONException e) {
             throw new RuntimeException("Not implemented");  // TODO

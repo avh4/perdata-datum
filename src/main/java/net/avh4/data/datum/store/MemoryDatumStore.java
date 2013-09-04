@@ -6,8 +6,8 @@ import fj.data.TreeMap;
 import net.avh4.data.datum.primitives.TempId;
 import net.avh4.util.IteratorIterable;
 import net.avh4.util.TransformingIterator;
-import net.avh4.util.data.fj.FjSetIndex;
 import net.avh4.util.data.Index;
+import net.avh4.util.data.fj.FjSetIndex;
 
 import java.util.Iterator;
 

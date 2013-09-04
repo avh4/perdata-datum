@@ -21,6 +21,7 @@ public class KnownIdTest {
     public void withSameId_isEqual() throws Exception {
         assertThat(new KnownId("a")).isEqualTo(new KnownId("a"));
     }
+
     @Test
     public void withDifferentId_isNotEqual() throws Exception {
         assertThat(new KnownId("a")).isNotEqualTo(new KnownId("b"));
