@@ -19,7 +19,8 @@ public abstract class IndexContract {
     @Test
     public void iteratesSingleValue() throws Exception {
         subject = subject.add("Arnold", "Arnold Palmer");
-        assertThat(subject.iterator("Arnold", "Arnold")).containsOnly(new IndexValue("Arnold", "Arnold Palmer"));
+        assertThat(subject.iterator("Arnold", "Arnold")).hasSize(1);
+        assertThat(subject.iterator("Arnold", "Arnold").next().value()).isEqualTo("Arnold Palmer");
     }
 
     @Test
@@ -32,12 +33,14 @@ public abstract class IndexContract {
     @Test
     public void iterator_skipsToMatchingValues() throws Exception {
         subject = subject.add("Arnold", "Arnold Palmer").add("Betty", "Betty White");
-        assertThat(subject.iterator("Betty", "Betty")).containsOnly(new IndexValue("Betty", "Betty White"));
+        assertThat(subject.iterator("Betty", "Betty")).hasSize(1);
+        assertThat(subject.iterator("Betty", "Betty").next().value()).isEqualTo("Betty White");
     }
 
     @Test
     public void iterator_stopsAfterMatchingValues() throws Exception {
         subject = subject.add("Arnold", "Arnold Palmer").add("Betty", "Betty White");
-        assertThat(subject.iterator("Arnold", "Arnold")).containsOnly(new IndexValue("Arnold", "Arnold Palmer"));
+        assertThat(subject.iterator("Arnold", "Arnold")).hasSize(1);
+        assertThat(subject.iterator("Arnold", "Arnold").next().value()).isEqualTo("Arnold Palmer");
     }
 }

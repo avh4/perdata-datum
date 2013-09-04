@@ -1,33 +1,33 @@
-package net.avh4.util.data;
+package net.avh4.util.data.fj;
 
 import fj.F2;
 import fj.Ord;
 import fj.Ordering;
-import fj.P2;
+import net.avh4.util.data.Index;
 
 import static fj.Function.curry;
 
-public class IndexValue<K extends Comparable<K>, V extends Comparable<V>> extends P2<K, V> {
+class FjSetIndexEntry<K extends Comparable<K>, V extends Comparable<V>> implements Index.IndexEntry<K, V> {
     private final K key;
     private final V value;
     private final boolean matchEnd;
 
-    public IndexValue(K key, V value) {
+    public FjSetIndexEntry(K key, V value) {
         this.key = key;
         this.value = value;
         this.matchEnd = false;
     }
 
-    public IndexValue(K key, Void value, boolean matchEnd) {
+    public FjSetIndexEntry(K key, Void value, boolean matchEnd) {
         this.key = key;
         this.value = null;
         this.matchEnd = matchEnd;
     }
 
-    public static <K extends Comparable<K>, V extends Comparable<V>> Ord<IndexValue<K, V>> ord() {
+    public static <K extends Comparable<K>, V extends Comparable<V>> Ord<FjSetIndexEntry<K, V>> ord() {
         final Ord<K> oa = Ord.comparableOrd();
-        return Ord.ord(curry(new F2<IndexValue<K, V>, IndexValue<K, V>, Ordering>() {
-            public Ordering f(final IndexValue<K, V> a, final IndexValue<K, V> b) {
+        return Ord.ord(curry(new F2<FjSetIndexEntry<K, V>, FjSetIndexEntry<K, V>, Ordering>() {
+            public Ordering f(final FjSetIndexEntry<K, V> a, final FjSetIndexEntry<K, V> b) {
                 if (!oa.eq(a.key, b.key)) return oa.compare(a.key, b.key);
                 else {
                     if (a.value != null && b.value != null) return Ord.<V>comparableOrd().compare(a.value, b.value);
@@ -42,11 +42,11 @@ public class IndexValue<K extends Comparable<K>, V extends Comparable<V>> extend
         }));
     }
 
-    public K key() {
+    @Override public K key() {
         return key;
     }
 
-    public V value() {
+    @Override public V value() {
         return value;
     }
 
@@ -55,7 +55,7 @@ public class IndexValue<K extends Comparable<K>, V extends Comparable<V>> extend
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        IndexValue that = (IndexValue) o;
+        FjSetIndexEntry that = (FjSetIndexEntry) o;
 
         if (key != null ? !key.equals(that.key) : that.key != null) return false;
         if (value != null ? !value.equals(that.value) : that.value != null) return false;
@@ -72,13 +72,5 @@ public class IndexValue<K extends Comparable<K>, V extends Comparable<V>> extend
 
     @Override public String toString() {
         return "<" + key + ":" + value + '>';
-    }
-
-    @Override public K _1() {
-        return key;
-    }
-
-    @Override public V _2() {
-        return value;
     }
 }

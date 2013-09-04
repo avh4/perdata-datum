@@ -8,5 +8,11 @@ public interface Index<K extends Comparable<K>, V extends Comparable<V>> {
 
     public Index<K, V> remove(K key, V value);
 
-    public Iterator<IndexValue<K, V>> iterator(K startKey, K endKey);
+    public Iterator<IndexEntry<K, V>> iterator(K startKey, K endKey);
+
+    interface IndexEntry<K extends Comparable<K>, V extends Comparable<V>> {
+        K key();
+
+        V value();
+    }
 }
