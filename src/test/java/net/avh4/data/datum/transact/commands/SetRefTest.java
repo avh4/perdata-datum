@@ -12,15 +12,16 @@ import org.junit.runner.RunWith;
 import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(Nested.class)
-public class SetTest {
+public class SetRefTest {
     private static final Id robot = new KnownId("robot");
-    private Set subject;
+    private static final Id kitty = new KnownId("kitty");
+    private SetRef subject;
     private DatumStore store;
 
     @Before
     public void setUp() throws Exception {
         store = new MemoryDatumStore();
-        subject = new Set(robot, "loves", "kitty");
+        subject = new SetRef(robot, "loves", kitty);
     }
 
     @Test

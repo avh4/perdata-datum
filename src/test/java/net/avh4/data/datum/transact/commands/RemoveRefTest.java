@@ -10,15 +10,16 @@ import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class RemoveTest {
+public class RemoveRefTest {
     private static final Id gregory = new KnownId("gregory");
-    private Remove subject;
+    private static final Id house = new KnownId("House M.D.");
+    private RemoveRef subject;
     private DatumStore store;
 
     @Before
     public void setUp() throws Exception {
         store = new MemoryDatumStore();
-        subject = new Remove(gregory, "watches", "House M.D.");
+        subject = new RemoveRef(gregory, "watches", house);
     }
 
     @Test

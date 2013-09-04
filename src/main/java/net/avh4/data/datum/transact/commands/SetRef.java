@@ -5,34 +5,32 @@ import net.avh4.data.datum.store.DatumStore;
 import net.avh4.data.datum.transact.Command;
 import net.avh4.data.datum.transact.TransactionException;
 
-public class Increment implements Command {
+public class SetRef implements Command {
     private final Id entity;
     private final String action;
+    private final Id ref;
 
-    public Increment(Id entity, String action) {
+    public SetRef(Id entity, String action, Id ref) {
         this.entity = entity;
         this.action = action;
+        this.ref = ref;
     }
 
     @Override public DatumStore execute(DatumStore store) throws TransactionException {
         final String entityId = entity.id();
+        final String value = ref.id();
+        store = store.set(entityId, action, value);
         final String oldValue = store.get(entityId, action);
-        int v = oldValue == null ? 0 : Integer.parseInt(oldValue);
         if (oldValue != null) {
-            store = store.removeIndex(action, formatIndex(v), entityId);
+            store = store.removeIndex(action, oldValue, entityId);
         }
-        v++;
-        store = store.set(entityId, action, Integer.toString(v));
-        store = store.addIndex(action, formatIndex(v), entityId);
+        store = store.addIndex(action, value, entityId);
         return store;
     }
 
     @Override public DatumStore resolveTempIds(DatumStore store) {
         store = entity.resolve(store);
+        store = ref.resolve(store);
         return store;
-    }
-
-    private String formatIndex(int v) {
-        return String.format("%010d", v);
     }
 }

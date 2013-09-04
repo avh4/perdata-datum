@@ -1,9 +1,6 @@
 package net.avh4.data.datum.transact;
 
-import net.avh4.data.datum.prim.Datum;
 import net.avh4.data.datum.store.DatumStore;
-import net.avh4.data.datum.transact.commands.Add;
-import net.avh4.data.datum.transact.commands.Set;
 
 public class LocalTransactor implements Transactor {
     private DatumStore store;
@@ -14,14 +11,8 @@ public class LocalTransactor implements Transactor {
 
     @Override public DatumStore transact(Transaction transaction) throws TransactionException {
         DatumStore store = this.store;
-        for (Datum datum : transaction.assertions()) {
-            store = datum.resolveTempIds(store);
-            final Command command = new Set(datum.entityId(), datum.action(), datum.value());
-            store = command.execute(store);
-        }
-        for (Datum datum : transaction.additions()) {
-            store = datum.resolveTempIds(store);
-            Command command = new Add(datum.entityId(), datum.action(), datum.value());
+        for (Command command : transaction.commands()) {
+            store = command.resolveTempIds(store);
             store = command.execute(store);
         }
         return (this.store = store);

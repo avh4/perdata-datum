@@ -4,4 +4,6 @@ import net.avh4.data.datum.store.DatumStore;
 
 public interface Command {
     DatumStore execute(DatumStore store) throws TransactionException;
+
+    DatumStore resolveTempIds(DatumStore store);
 }

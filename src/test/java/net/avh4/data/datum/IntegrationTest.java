@@ -101,17 +101,17 @@ public class IntegrationTest {
             bookId = new TempId();
             final TempId chapter1 = new TempId();
             Transaction t1 = new Transaction()
-                    .set(new ValueDatum(meta, "attempts", "1"))
+                    .set(meta, "attempts", "1")
 
-                    .set(new ValueDatum(bookId, "db:type", "book"))
-                    .set(new ValueDatum(bookId, "title", "The Big Orange Splot"))
+                    .set(bookId, "db:type", "book")
+                    .set(bookId, "title", "The Big Orange Splot")
 
-                    .set(new ValueDatum(author, "name", "Daniel Pinkwater"))
-                    .set(new RefDatum(bookId, "author", author))
+                    .set(author, "name", "Daniel Pinkwater")
+                    .set(bookId, "author", author)
 
-                    .set(new ValueDatum(chapter1, "title", "Chapter 1"))
-                    .set(new ValueDatum(chapter1, "body", "Mr. Plumbean lived on a ..."))
-                    .add(new RefDatum(bookId, "chapters", chapter1));
+                    .set(chapter1, "title", "Chapter 1")
+                    .set(chapter1, "body", "Mr. Plumbean lived on a ...")
+                    .add(bookId, "chapters", chapter1);
 
             store = transactor.transact(t1);
         }
@@ -119,13 +119,13 @@ public class IntegrationTest {
         {
             final TempId chapter2 = new TempId();
             Transaction t2 = new Transaction()
-                    .set(new ValueDatum(meta, "attempts", "2"))
+                    .set(meta, "attempts", "2")
 
-                    .set(new ValueDatum(author, "name", "Daniel Manus Pinkwater"))
+                    .set(author, "name", "Daniel Manus Pinkwater")
 
-                    .set(new ValueDatum(chapter2, "title", "Chapter 2"))
-                    .set(new ValueDatum(chapter2, "body", "He liked it that ..."))
-                    .add(new RefDatum(bookId, "chapters", chapter2));
+                    .set(chapter2, "title", "Chapter 2")
+                    .set(chapter2, "body", "He liked it that ...")
+                    .add(bookId, "chapters", chapter2);
 
             store = transactor.transact(t2);
         }

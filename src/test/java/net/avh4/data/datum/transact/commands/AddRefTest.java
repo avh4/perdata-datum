@@ -9,15 +9,16 @@ import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class AddTest {
-    private Add subject;
-    private DatumStore store;
+public class AddRefTest {
     private static final Id gregory = new KnownId("gregory");
+    private static final Id house = new KnownId("House M.D.");
+    private AddRef subject;
+    private DatumStore store;
 
     @Before
     public void setUp() throws Exception {
         store = new MemoryDatumStore();
-        subject = new Add(gregory, "watches", "House M.D.");
+        subject = new AddRef(gregory, "watches", house);
     }
 
     @Test

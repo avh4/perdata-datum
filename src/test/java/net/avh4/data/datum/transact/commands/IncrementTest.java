@@ -1,5 +1,7 @@
 package net.avh4.data.datum.transact.commands;
 
+import net.avh4.data.datum.prim.Id;
+import net.avh4.data.datum.prim.KnownId;
 import net.avh4.data.datum.store.DatumStore;
 import net.avh4.data.datum.store.MemoryDatumStore;
 import org.junit.Before;
@@ -10,11 +12,12 @@ import static org.fest.assertions.Assertions.assertThat;
 public class IncrementTest {
     private Increment subject;
     private DatumStore store;
+    private static final Id buster = new KnownId("buster");
 
     @Before
     public void setUp() throws Exception {
         store = new MemoryDatumStore();
-        subject = new Increment("buster", "hey_brother");
+        subject = new Increment(buster, "hey_brother");
     }
 
     @Test

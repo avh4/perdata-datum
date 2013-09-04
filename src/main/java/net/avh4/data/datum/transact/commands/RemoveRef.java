@@ -7,19 +7,20 @@ import net.avh4.data.datum.transact.TransactionException;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class Remove implements Command {
+public class RemoveRef implements Command {
     private final Id entity;
     private final String action;
-    private final String value;
+    private final Id ref;
 
-    public Remove(Id entity, String action, String value) {
+    public RemoveRef(Id entity, String action, Id ref) {
         this.entity = entity;
         this.action = action;
-        this.value = value;
+        this.ref = ref;
     }
 
     @Override public DatumStore execute(DatumStore store) throws TransactionException {
         final String entityId = entity.id();
+        final String value = ref.id();
         final String oldValue = store.get(entityId, action);
         if (oldValue == null) throw new TransactionException("Array element does not exist: " + value);
         try {
@@ -45,6 +46,7 @@ public class Remove implements Command {
 
     @Override public DatumStore resolveTempIds(DatumStore store) {
         store = entity.resolve(store);
+        store = ref.resolve(store);
         return store;
     }
 }

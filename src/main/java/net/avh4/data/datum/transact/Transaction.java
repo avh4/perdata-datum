@@ -1,47 +1,57 @@
 package net.avh4.data.datum.transact;
 
 import fj.data.List;
-import net.avh4.data.datum.prim.Datum;
-import net.avh4.data.datum.prim.TempId;
+import net.avh4.data.datum.prim.Id;
+import net.avh4.data.datum.transact.commands.*;
 
 public class Transaction {
-    private final List<Datum> assertions;
-    private final List<TempId> tempIds;
-    private final long nextTempId;
-    private final List<Datum> additions;
+    private final List<Command> commands;
 
     public Transaction() {
-        this(List.<Datum>nil(), List.<Datum>nil(), List.<TempId>nil(), 0);
+        this(List.<Command>nil());
     }
 
-    protected Transaction(List<Datum> assertions, List<Datum> additions, List<TempId> tempIds, long nextTempId) {
-        this.assertions = assertions;
-        this.tempIds = tempIds;
-        this.nextTempId = nextTempId;
-        this.additions = additions;
+    protected Transaction(List<Command> commands) {
+        this.commands = commands;
     }
 
-    public Transaction set(Datum datum) {
-        return new Transaction(
-                assertions.cons(datum),
-                additions,
-                tempIds,
-                nextTempId);
+    public Transaction and(Command command) {
+        return new Transaction(commands.cons(command));
     }
 
-    public Transaction add(Datum datum) {
-        return new Transaction(
-                assertions,
-                additions.cons(datum),
-                tempIds,
-                nextTempId);
+    public Iterable<Command> commands() {
+        return commands;
     }
 
-    public Iterable<Datum> assertions() {
-        return assertions;
+    //
+    // All the following methods are simply convenience methods to create various commonly-used Command objects
+    //
+
+    public Transaction set(Id entity, String action, String value) {
+        return and(new Set(entity, action, value));
     }
 
-    public Iterable<Datum> additions() {
-        return additions;
+    public Transaction set(Id entity, String attribute, Id ref) {
+        return and(new SetRef(entity, attribute, ref));
+    }
+
+    public Transaction add(Id entity, String action, String value) {
+        return and(new Add(entity, action, value));
+    }
+
+    public Transaction add(Id entity, String attribute, Id ref) {
+        return and(new AddRef(entity, attribute, ref));
+    }
+
+    public Transaction remove(Id entity, String action, String value) {
+        return and(new Remove(entity, action, value));
+    }
+
+    public Transaction remove(Id entity, String attribute, Id ref) {
+        return and(new RemoveRef(entity, attribute, ref));
+    }
+
+    public Transaction inc(Id entity, String attribute) {
+        return and(new Increment(entity, attribute));
     }
 }

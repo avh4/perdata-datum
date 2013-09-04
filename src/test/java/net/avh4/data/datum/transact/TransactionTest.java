@@ -1,6 +1,5 @@
 package net.avh4.data.datum.transact;
 
-import net.avh4.data.datum.prim.Datum;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -10,7 +9,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class TransactionTest {
     private Transaction subject;
-    @Mock private Datum datum;
+    @Mock private Command c1;
 
     @Before
     public void setUp() throws Exception {
@@ -19,24 +18,13 @@ public class TransactionTest {
     }
 
     @Test
-    public void set_shouldReturnTransaction() throws Exception {
-        assertThat(subject.set(datum)).isNotNull();
+    public void and_shouldReturnTransaction() throws Exception {
+        assertThat(subject.and(c1)).isNotNull();
     }
 
     @Test
-    public void assertions_shouldReturnDatums() throws Exception {
-        subject = subject.set(datum);
-        assertThat(subject.assertions()).containsOnly(datum);
-    }
-
-    @Test
-    public void add_shouldReturnTransaction() throws Exception {
-        assertThat(subject.add(datum)).isNotNull();
-    }
-
-    @Test
-    public void additions_shouldReturnDatums() throws Exception {
-        subject = subject.add(datum);
-        assertThat(subject.additions()).containsOnly(datum);
+    public void commands_shouldReturnCommands() throws Exception {
+        subject = subject.and(c1);
+        assertThat(subject.commands()).containsOnly(c1);
     }
 }
