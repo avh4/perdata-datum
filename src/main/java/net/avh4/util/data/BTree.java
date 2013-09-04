@@ -1,5 +1,7 @@
 package net.avh4.util.data;
 
+import java.util.Arrays;
+
 public class BTree {
     private final BTreeStorage storage;
     public final String[] keys;
@@ -39,7 +41,15 @@ public class BTree {
         return new BTree(storage, keys, nodes, vals);
     }
 
+    public BTree insert(String key) {
+        return insert(key, null);
+    }
+
     public BTree node(int i) {
         return storage.get(nodes[i]);
+    }
+
+    @Override public String toString() {
+        return Arrays.toString(keys);
     }
 }
