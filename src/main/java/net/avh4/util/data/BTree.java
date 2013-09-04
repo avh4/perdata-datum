@@ -29,7 +29,8 @@ public class BTree {
         final String[] vals = this.vals.clone();
         int i;
         for (i = keys.length - 1; i > 0; i--) {
-            if (keys[i-1] == null || key.compareTo(keys[i-1]) < 0) {
+            if (keys[i - 1] == null) continue;
+            if (key.compareTo(keys[i - 1]) < 0) {
                 keys[i] = keys[i - 1];
                 vals[i] = vals[i - 1];
             } else {
