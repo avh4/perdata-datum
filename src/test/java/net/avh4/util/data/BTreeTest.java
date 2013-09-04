@@ -4,17 +4,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class BTreeTest {
     private BTree subject;
-    private TestBTreeStorage storage;
 
     @Before
     public void setUp() throws Exception {
-        storage = new TestBTreeStorage();
+        TestBTreeStorage storage = new TestBTreeStorage();
         subject = new BTree(storage, 2);
     }
 
