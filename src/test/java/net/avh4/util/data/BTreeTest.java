@@ -25,130 +25,97 @@ public class BTreeTest {
     @Test
     public void insertRoot() throws Exception {
         t = t.insert("M", "em");
-        assertNode(t, 0, "M", "em");
+        assertTree(t, "[M(em)...]");
     }
 
     @Test
     public void insertLeft() throws Exception {
         t = t.insert("M", "em").insert("A", "ay");
-        assertNode(t, 0, "A", "ay");
-        assertNode(t, 1, "M", "em");
+        assertTree(t, "[A(ay)M(em)..]");
     }
 
     @Test
     public void insertRight() throws Exception {
         t = t.insert("M", "em").insert("Z", "zee");
-        assertNode(t, 0, "M", "em");
-        assertNode(t, 1, "Z", "zee");
+        assertTree(t, "[M(em)Z(zee)..]");
     }
 
     @Test
     public void insertLeftLeft() throws Exception {
         t = t.insert("M", "em").insert("B", "bee").insert("A", "ay");
-        assertNode(t, 0, "A", "ay");
-        assertNode(t, 1, "B", "bee");
-        assertNode(t, 2, "M", "em");
+        assertTree(t, "[A(ay)B(bee)M(em).]");
     }
 
     @Test
     public void insertLeftRight() throws Exception {
         t = t.insert("M", "em").insert("A", "ay").insert("B", "bee");
-        assertNode(t, 0, "A", "ay");
-        assertNode(t, 1, "B", "bee");
-        assertNode(t, 2, "M", "em");
+        assertTree(t, "[A(ay)B(bee)M(em).]");
     }
 
     @Test
     public void insertRightRight() throws Exception {
         t = t.insert("M", "em").insert("Y", "wye").insert("Z", "zee");
-        assertNode(t, 0, "M", "em");
-        assertNode(t, 1, "Y", "wye");
-        assertNode(t, 2, "Z", "zee");
+        assertTree(t, "[M(em)Y(wye)Z(zee).]");
     }
 
     @Test
     public void splitOnNewKey() throws Exception {
         t = t.insert("A", "ay").insert("B", "bee").insert("D", "dee").insert("E", "ee");
         t = t.insert("C", "cee");
-        assertNode(t, 0, "D");
-        assertNode(t.node(0), 0, "A", "ay");
-        assertNode(t.node(0), 1, "B", "bee");
-        assertNode(t.node(0), 2, "C", "cee");
-        assertNode(t.node(1), 0, "D", "dee");
-        assertNode(t.node(1), 1, "E", "ee");
+        assertTree(t, "[[A(ay)B(bee)C(cee).]D[D(dee)E(ee)..]...]");
     }
 
     @Test
     public void splitWithNewKeyLeft() throws Exception {
         t = t.insert("B", "bee").insert("C", "cee").insert("D", "dee").insert("E", "ee");
         t = t.insert("A", "ay");
-        assertNode(t, 0, "D");
-        assertNode(t.node(0), 0, "A", "ay");
-        assertNode(t.node(0), 1, "B", "bee");
-        assertNode(t.node(0), 2, "C", "cee");
-        assertNode(t.node(1), 0, "D", "dee");
-        assertNode(t.node(1), 1, "E", "ee");
+        assertTree(t, "[[A(ay)B(bee)C(cee).]D[D(dee)E(ee)..]...]");
     }
 
     @Test
     public void splitWithNewKeyRight() throws Exception {
         t = t.insert("A", "ay").insert("B", "bee").insert("C", "cee").insert("D", "dee");
         t = t.insert("E", "ee");
-        assertNode(t, 0, "C");
-        assertNode(t.node(0), 0, "A", "ay");
-        assertNode(t.node(0), 1, "B", "bee");
-        assertNode(t.node(1), 0, "C", "cee");
-        assertNode(t.node(1), 1, "D", "dee");
-        assertNode(t.node(1), 2, "E", "ee");
+        assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)E(ee).]...]");
     }
 
     @Test
     public void splitWithNewKeyEqual() throws Exception {
         t = t.insert("A", "ay").insert("B", "bee").insert("C", "cee").insert("D", "dee");
         t = t.insert("C", "cee2");
-        assertNode(t, 0, "C");
-        assertNode(t.node(0), 0, "A", "ay");
-        assertNode(t.node(0), 1, "B", "bee");
-        assertNode(t.node(1), 0, "C", "cee");
-        assertNode(t.node(1), 1, "C", "cee2");
-        assertNode(t.node(1), 2, "D", "dee");
+        assertTree(t, "[[A(ay)B(bee)..]C[C(cee)C(cee2)D(dee).]...]");
     }
 
     @Test
     public void insertLeftChild() throws Exception {
         t = t.insert("B", "bee").insert("C", "cee").insert("D", "dee").insert("E", "ee").insert("F", "ef");
         t = t.insert("A", "ay");
-        assertNode(t, 0, "D");
-        assertNode(t.node(0), 0, "A", "ay");
-        assertNode(t.node(0), 1, "B", "bee");
-        assertNode(t.node(0), 2, "C", "cee");
-        assertNode(t.node(1), 0, "D", "dee");
-        assertNode(t.node(1), 1, "E", "ee");
-        assertNode(t.node(1), 2, "F", "ef");
+        assertTree(t, "[[A(ay)B(bee)C(cee).]D[D(dee)E(ee)F(ef).]...]");
     }
 
     @Test
     public void insertRightChild() throws Exception {
         t = t.insert("A", "ay").insert("B", "bee").insert("C", "cee").insert("D", "dee").insert("E", "ee");
         t = t.insert("F", "ef");
-        assertNode(t, 0, "C");
-        assertNode(t.node(0), 0, "A", "ay");
-        assertNode(t.node(0), 1, "B", "bee");
-        assertNode(t.node(1), 0, "C", "cee");
-        assertNode(t.node(1), 1, "D", "dee");
-        assertNode(t.node(1), 2, "E", "ee");
-        assertNode(t.node(1), 3, "F", "ef");
+        assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)E(ee)F(ef)]...]");
     }
 
-    private void assertNode(BTree t, int i, String key) {
-        assertThat(t.keys[i]).isEqualTo(key);
-        assertThat(t.vals).isNull();
+    private void assertTree(BTree t, String description) {
+        assertThat(description(t)).isEqualTo(description);
     }
 
-    private void assertNode(BTree t, int i, String key, String val) {
-        assertThat(t.keys[i]).isEqualTo(key);
-        assertThat(t.vals[i]).isEqualTo(val);
-        assertThat(t.nodes).isNull();
+    private String description(BTree t) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < t.keys.length; i++) {
+            if (t.nodes != null && t.nodes[i] != 0) sb.append(description(t.node(i)));
+            if (t.keys[i] == null) sb.append(".");
+            else {
+                sb.append(t.keys[i]);
+                if (t.vals != null && t.vals[i] != null) sb.append("(").append(t.vals[i]).append(")");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     private static class TestBTreeStorage implements BTreeStorage {
