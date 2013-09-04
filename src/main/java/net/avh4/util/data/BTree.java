@@ -30,12 +30,9 @@ public class BTree {
         int i;
         for (i = keys.length - 1; i > 0; i--) {
             if (keys[i - 1] == null) continue;
-            if (key.compareTo(keys[i - 1]) < 0) {
-                keys[i] = keys[i - 1];
-                vals[i] = vals[i - 1];
-            } else {
-                break;
-            }
+            if (key.compareTo(keys[i - 1]) >= 0) break;
+            keys[i] = keys[i - 1];
+            vals[i] = vals[i - 1];
         }
         keys[i] = key;
         vals[i] = value;
