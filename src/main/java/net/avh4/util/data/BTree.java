@@ -61,14 +61,13 @@ public class BTree {
             rightVals[i] = leftVals[i + d];
             leftKeys[i + d] = null;
         }
-        leftKeys[d] = key;
-        leftVals[d] = value;
 
         String[] keys = new String[d * 2];
         long[] nodes = new long[d * 2 + 1];
-        keys[0] = key;
-        nodes[0] = storage.write(new BTree(storage, leftKeys, leftVals));
+        final BTree left = new BTree(storage, leftKeys, leftVals).insert(key, value);
+        nodes[0] = storage.write(left);
         nodes[1] = storage.write(new BTree(storage, rightKeys, rightVals));
+        keys[0] = left.keys[d];
         return new BTree(storage, keys, nodes, null);
     }
 
