@@ -29,15 +29,21 @@ public class BTree {
 
     public BTree insert(String key, String value) {
         if (vals == null) {
-            return insertBelow(key, value);
-        } else if (keys[keys.length - 1] == null) {
-            return insertHere(key, value);
+            return insertInBranch(key, value);
         } else {
-            return split(key, value);
+            return insertOrSplitLeaf(key, value);
         }
     }
 
-    private BTree insertHere(String key, String value) {
+    private BTree insertOrSplitLeaf(String key, String value) {
+        if (keys[keys.length - 1] == null) {
+            return insertInLeaf(key, value);
+        } else {
+            return splitLeaf(key, value);
+        }
+    }
+
+    private BTree insertInLeaf(String key, String value) {
         final String[] keys = this.keys.clone();
         final String[] vals = this.vals.clone();
         int i;
@@ -52,7 +58,7 @@ public class BTree {
         return new BTree(storage, keys, vals);
     }
 
-    private BTree insertBelow(String key, String value) {
+    private BTree insertInBranch(String key, String value) {
         int i;
         for (i = keys.length; i > 0; i--) {
             if (keys[i - 1] == null) continue;
@@ -73,7 +79,7 @@ public class BTree {
         return new BTree(storage, keys, nodes);
     }
 
-    private BTree split(String key, String value) {
+    private BTree splitLeaf(String key, String value) {
         String[] leftKeys = this.keys.clone();
         String[] leftVals = this.vals.clone();
         String[] rightKeys = new String[this.keys.length];
@@ -89,15 +95,10 @@ public class BTree {
         long[] nodes = new long[d * 2 + 1];
         BTree left = new BTree(storage, leftKeys, leftVals);
         BTree right = new BTree(storage, rightKeys, rightVals);
-        if (key.compareTo(rightKeys[0]) >= 0) {
-            right = right.insert(key, value);
-        } else {
-            left = left.insert(key, value);
-        }
         nodes[0] = storage.write(left);
         nodes[1] = storage.write(right);
         keys[0] = right.keys[0];
-        return new BTree(storage, keys, nodes);
+        return new BTree(storage, keys, nodes).insert(key, value);
     }
 
     public BTree insert(String key) {
