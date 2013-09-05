@@ -143,6 +143,15 @@ public class BTreeTest {
         t = t.insert("I", "ai").insert("J", "jay").insert("K", "kay");
         assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)..]E[E(ee)F(ef)..]G[G(gee)H(aitch)..]I[I(ai)J(jay)K(kay).]]");
     }
+
+    @Test
+    public void insertToFifthChild() throws Exception {
+        t = t.insert("A", "ay").insert("B", "bee").insert("C", "cee").insert("D", "dee");
+        t = t.insert("E", "ee").insert("F", "ef").insert("G", "gee").insert("H", "aitch");
+        t = t.insert("I", "ai").insert("J", "jay").insert("K", "kay").insert("L", "el");
+        assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)..]E[E(ee)F(ef)..]G[G(gee)H(aitch)..]I[I(ai)J(jay)K(kay)L(el)]]");
+    }
+
     private void assertTree(BTree t, String description) {
         assertThat(description(t)).isEqualTo(description);
     }

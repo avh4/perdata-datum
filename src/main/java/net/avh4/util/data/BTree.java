@@ -54,7 +54,7 @@ public class BTree {
 
     private BTree insertBelow(String key, String value) {
         int i;
-        for (i = keys.length - 1; i > 0; i--) {
+        for (i = keys.length; i > 0; i--) {
             if (keys[i - 1] == null) continue;
             if (key.compareTo(keys[i-1]) >= 0) break;
         }
