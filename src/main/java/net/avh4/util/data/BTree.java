@@ -62,7 +62,7 @@ public class BTree {
         int i;
         for (i = keys.length; i > 0; i--) {
             if (keys[i - 1] == null) continue;
-            if (key.compareTo(keys[i-1]) >= 0) break;
+            if (key.compareTo(keys[i - 1]) >= 0) break;
         }
         BTree result = storage.get(nodes[i]).insert(key, value);
         return integrateInsertResult(i, result);
@@ -70,20 +70,44 @@ public class BTree {
 
     private BTree integrateInsertResult(int i, BTree result) {
         if (result.vals == null) {
-            return integrateSplitResult(i, result);
+            return insertOrSplitBranch(i, result);
         } else {
             return replaceChild(i, result);
         }
     }
 
-    private BTree integrateSplitResult(int i, BTree result) {
+    private BTree insertOrSplitBranch(int i, BTree result) {
+        if (nodes[nodes.length - 1] == 0) {
+            return insertInBranch(i, result);
+        } else {
+            return splitBranch(i, result);
+        }
+    }
+
+    private BTree splitBranch(int i, BTree result) {
         String[] keys = this.keys.clone();
         long[] nodes = this.nodes.clone();
-        if (nodes[i+1] != 0) nodes[i+2] = nodes[i+1];
-        nodes[i+1] = result.nodes[1];
+        return new BTree(storage, keys, nodes);
+    }
+
+    private BTree insertInBranch(int i, BTree result) {
+        String[] keys = this.keys.clone();
+        long[] nodes = this.nodes.clone();
+        System.out.println(i);
+        System.out.println(result);
+        System.out.println(Arrays.toString(nodes));
+        if (i + 3 < nodes.length) {
+            nodes[i + 3] = nodes[i + 2];
+            keys[i+2] = keys[i+1];
+        }
+        if (nodes[i + 1] != 0) {
+            nodes[i + 2] = nodes[i + 1];
+            keys[i + 1] = keys[i];
+        }
+        nodes[i + 1] = result.nodes[1];
         nodes[i] = result.nodes[0];
-        if (keys[i] != null) keys[i+1] = keys[i];
         keys[i] = result.keys[0];
+        System.out.println("-> " + Arrays.toString(nodes));
         return new BTree(storage, keys, nodes);
     }
 
