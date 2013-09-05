@@ -136,14 +136,22 @@ public class BTreeTest {
         assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)..]E[E(ee)F(ef)..]G[G(gee)H(aitch)I(ai).].]");
     }
 
+    @Test
+    public void splitFourthChild() throws Exception {
+        t = t.insert("A", "ay").insert("B", "bee").insert("C", "cee").insert("D", "dee");
+        t = t.insert("E", "ee").insert("F", "ef").insert("G", "gee").insert("H", "aitch");
+        t = t.insert("I", "ai").insert("J", "jay").insert("K", "kay");
+        assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)..]E[E(ee)F(ef)..]G[G(gee)H(aitch)..]I[I(ai)J(jay)K(kay).]]");
+    }
     private void assertTree(BTree t, String description) {
         assertThat(description(t)).isEqualTo(description);
     }
 
     private String description(BTree t) {
         StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < t.keys.length; i++) {
+        for (int i = 0; i <= t.keys.length; i++) {
             if (t.nodes != null && t.nodes[i] != 0) sb.append(description(t.node(i)));
+            if (i == t.keys.length) break;
             if (t.keys[i] == null) sb.append(".");
             else {
                 sb.append(t.keys[i]);
