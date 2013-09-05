@@ -93,21 +93,13 @@ public class BTree {
     private BTree insertInBranch(int i, BTree result) {
         String[] keys = this.keys.clone();
         long[] nodes = this.nodes.clone();
-        System.out.println(i);
-        System.out.println(result);
-        System.out.println(Arrays.toString(nodes));
-        if (i + 3 < nodes.length) {
-            nodes[i + 3] = nodes[i + 2];
-            keys[i+2] = keys[i+1];
-        }
-        if (nodes[i + 1] != 0) {
-            nodes[i + 2] = nodes[i + 1];
-            keys[i + 1] = keys[i];
+        for (int j = keys.length; j > i + 1; j--) {
+            nodes[j] = nodes[j - 1];
+            keys[j - 1] = keys[j - 2];
         }
         nodes[i + 1] = result.nodes[1];
         nodes[i] = result.nodes[0];
         keys[i] = result.keys[0];
-        System.out.println("-> " + Arrays.toString(nodes));
         return new BTree(storage, keys, nodes);
     }
 
