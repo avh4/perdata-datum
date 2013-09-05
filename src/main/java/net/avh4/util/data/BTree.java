@@ -56,8 +56,18 @@ public class BTree {
         int i;
         if (key.compareTo(keys[0]) >= 0) i = 1;
         else i = 0;
-        BTree right = storage.get(nodes[i]).insert(key, value);
-        nodes[i] = storage.write(right);
+        BTree result = storage.get(nodes[i]).insert(key, value);
+        String[] keys = this.keys.clone();
+        long[] nodes = this.nodes.clone();
+        if (result.vals == null) {
+            nodes[2] = nodes[1];
+            nodes[1] = result.nodes[1];
+            nodes[0] = result.nodes[0];
+            keys[1] = keys[0];
+            keys[0] = result.keys[0];
+        } else {
+            nodes[i] = storage.write(result);
+        }
         return new BTree(storage, keys, nodes);
     }
 

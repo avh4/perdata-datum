@@ -100,6 +100,14 @@ public class BTreeTest {
         assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)E(ee)F(ef)]...]");
     }
 
+    @Test
+    public void splitLeftChild() throws Exception {
+        t = t.insert("B", "bee").insert("C", "cee").insert("F", "ef").insert("G", "gee");
+        t = t.insert("E", "ee").insert("D", "dee");
+        t = t.insert("A", "ay");
+        assertTree(t, "[[A(ay)B(bee)C(cee).]D[D(dee)E(ee)..]F[F(ef)G(gee)..]..]");
+    }
+
     private void assertTree(BTree t, String description) {
         assertThat(description(t)).isEqualTo(description);
     }
