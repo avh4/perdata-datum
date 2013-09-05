@@ -54,8 +54,10 @@ public class BTree {
 
     private BTree insertBelow(String key, String value) {
         int i;
-        if (key.compareTo(keys[0]) >= 0) i = 1;
-        else i = 0;
+        for (i = keys.length - 1; i > 0; i--) {
+            if (keys[i - 1] == null) continue;
+            if (key.compareTo(keys[i-1]) >= 0) break;
+        }
         BTree result = storage.get(nodes[i]).insert(key, value);
         String[] keys = this.keys.clone();
         long[] nodes = this.nodes.clone();
