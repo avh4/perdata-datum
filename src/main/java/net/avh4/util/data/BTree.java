@@ -53,15 +53,12 @@ public class BTree {
     }
 
     private BTree insertBelow(String key, String value) {
-        if (key.compareTo(keys[0]) >= 0) {
-            BTree right = storage.get(nodes[1]).insert(key, value);
-            nodes[1] = storage.write(right);
-            return new BTree(storage, keys, nodes);
-        } else {
-            BTree left = storage.get(nodes[0]).insert(key, value);
-            nodes[0] = storage.write(left);
-            return new BTree(storage, keys, nodes);
-        }
+        int i;
+        if (key.compareTo(keys[0]) >= 0) i = 1;
+        else i = 0;
+        BTree right = storage.get(nodes[i]).insert(key, value);
+        nodes[i] = storage.write(right);
+        return new BTree(storage, keys, nodes);
     }
 
     private BTree split(String key, String value) {
