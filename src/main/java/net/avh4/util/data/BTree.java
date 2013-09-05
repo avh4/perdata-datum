@@ -60,11 +60,11 @@ public class BTree {
         String[] keys = this.keys.clone();
         long[] nodes = this.nodes.clone();
         if (result.vals == null) {
-            nodes[2] = nodes[1];
-            nodes[1] = result.nodes[1];
-            nodes[0] = result.nodes[0];
-            keys[1] = keys[0];
-            keys[0] = result.keys[0];
+            nodes[i+2] = nodes[i+1];
+            nodes[i+1] = result.nodes[1];
+            nodes[i] = result.nodes[0];
+            keys[i+1] = keys[i];
+            keys[i] = result.keys[0];
         } else {
             nodes[i] = storage.write(result);
         }

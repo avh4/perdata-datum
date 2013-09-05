@@ -104,8 +104,18 @@ public class BTreeTest {
     public void splitLeftChild() throws Exception {
         t = t.insert("B", "bee").insert("C", "cee").insert("F", "ef").insert("G", "gee");
         t = t.insert("E", "ee").insert("D", "dee");
+        assertTree(t, "[[B(bee)C(cee)D(dee)E(ee)]F[F(ef)G(gee)..]...]");
         t = t.insert("A", "ay");
         assertTree(t, "[[A(ay)B(bee)C(cee).]D[D(dee)E(ee)..]F[F(ef)G(gee)..]..]");
+    }
+
+    @Test
+    public void splitRightChild() throws Exception {
+        t = t.insert("A", "ay").insert("B", "bee").insert("C", "cee").insert("D", "dee");
+        t = t.insert("E", "ee").insert("F", "ef");
+        assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)E(ee)F(ef)]...]");
+        t = t.insert("G", "gee");
+        assertTree(t, "[[A(ay)B(bee)..]C[C(cee)D(dee)..]E[E(ee)F(ef)G(gee).]..]");
     }
 
     private void assertTree(BTree t, String description) {
