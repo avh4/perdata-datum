@@ -39,7 +39,7 @@ public class BTree {
         if (keys[keys.length - 1] == null) {
             return insertInLeaf(key, value);
         } else {
-            return splitLeaf(key, value);
+            return insertInSplitLeaf(key, value);
         }
     }
 
@@ -80,13 +80,35 @@ public class BTree {
         if (nodes[nodes.length - 1] == 0) {
             return insertInBranch(i, result);
         } else {
-            return splitBranch(i, result);
+            return insertInSplitBranch(i, result);
         }
     }
 
-    private BTree splitBranch(int i, BTree result) {
-        String[] keys = this.keys.clone();
-        long[] nodes = this.nodes.clone();
+    private BTree insertInSplitBranch(int i, BTree result) {
+        String[] keys = new String[this.keys.length];
+        String[] leftKeys = new String[this.keys.length];
+        String[] rightKeys = new String[this.keys.length];
+        long[] nodes = new long[this.nodes.length];
+        long[] leftNodes = new long[this.nodes.length];
+        long[] rightNodes = new long[this.nodes.length];
+        if (i != 0) throw new RuntimeException("Not implemented");
+        leftNodes[0] = result.nodes[0];
+        leftNodes[1] = result.nodes[1];
+        leftNodes[2] = this.nodes[1];
+        rightNodes[0] = this.nodes[2];
+        rightNodes[1] = this.nodes[3];
+        rightNodes[2]  = this.nodes[4];
+
+        leftKeys[0] = result.keys[0];
+        leftKeys[1] = this.keys[0];
+        keys[0] = this.keys[1];
+        rightKeys[0] = this.keys[2];
+        rightKeys[1] = this.keys[3];
+
+        BTree left = new BTree(storage, leftKeys, leftNodes);
+        BTree right = new BTree(storage, rightKeys, rightNodes);
+        nodes[0] = storage.write(left);
+        nodes[1] = storage.write(right);
         return new BTree(storage, keys, nodes);
     }
 
@@ -109,10 +131,14 @@ public class BTree {
         return new BTree(storage, keys, nodes);
     }
 
-    private BTree splitLeaf(String key, String value) {
+    private BTree insertInSplitLeaf(String key, String value) {
+        return splitLeaf().insert(key, value);
+    }
+
+    private BTree splitLeaf() {
         String[] leftKeys = this.keys.clone();
-        String[] leftVals = this.vals.clone();
         String[] rightKeys = new String[this.keys.length];
+        String[] leftVals = this.vals.clone();
         String[] rightVals = new String[this.keys.length];
         final int d = this.keys.length / 2;
         for (int i = 0; i < d; i++) {
@@ -128,7 +154,7 @@ public class BTree {
         nodes[0] = storage.write(left);
         nodes[1] = storage.write(right);
         keys[0] = right.keys[0];
-        return new BTree(storage, keys, nodes).insert(key, value);
+        return new BTree(storage, keys, nodes);
     }
 
     public BTree insert(String key) {
