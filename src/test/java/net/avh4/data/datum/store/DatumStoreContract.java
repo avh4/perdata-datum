@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.fest.assertions.Assertions.assertThat;
 
 public abstract class DatumStoreContract {
-    private DatumStore subject;
+    protected DatumStore subject;
     private String id1, id2, id3, id4;
     private TempId a;
     private TempId b;

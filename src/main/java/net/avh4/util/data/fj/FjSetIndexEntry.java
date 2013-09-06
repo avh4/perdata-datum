@@ -5,9 +5,11 @@ import fj.Ord;
 import fj.Ordering;
 import net.avh4.util.data.Index;
 
+import java.io.Serializable;
+
 import static fj.Function.curry;
 
-class FjSetIndexEntry<K extends Comparable<K>, V extends Comparable<V>> implements Index.IndexEntry<K, V> {
+class FjSetIndexEntry<K extends Comparable<K>, V extends Comparable<V>> implements Index.IndexEntry<K, V>, Serializable {
     private final K key;
     private final V value;
     private final boolean matchEnd;

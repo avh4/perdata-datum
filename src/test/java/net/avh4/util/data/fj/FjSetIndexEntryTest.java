@@ -1,6 +1,7 @@
 package net.avh4.util.data.fj;
 
 import fj.Ordering;
+import net.avh4.util.test.SerializationUtils;
 import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -38,5 +39,12 @@ public class FjSetIndexEntryTest {
         assertThat(FjSetIndexEntry.<String, Integer>ord().compare(a2, aZ)).isEqualTo(Ordering.LT);
         assertThat(FjSetIndexEntry.<String, Integer>ord().compare(aZ, aZ)).isEqualTo(Ordering.EQ);
         assertThat(FjSetIndexEntry.<String, Integer>ord().compare(aZ, a2)).isEqualTo(Ordering.GT);
+    }
+
+    @Test
+    public void shouldSerializeNormalEntries() throws Exception {
+        assertThat(SerializationUtils.serialize(a1)).isEqualTo(a1);
+        assertThat(SerializationUtils.serialize(a2)).isEqualTo(a2);
+        assertThat(SerializationUtils.serialize(b1)).isEqualTo(b1);
     }
 }

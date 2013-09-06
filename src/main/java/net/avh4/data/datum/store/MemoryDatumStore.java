@@ -9,11 +9,17 @@ import net.avh4.util.TransformingIterator;
 import net.avh4.util.data.Index;
 import net.avh4.util.data.fj.FjSetIndex;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.Map;
 
-public class MemoryDatumStore implements DatumStore {
-    private final TreeMap<String, String> map;
-    private final TreeMap<String, Index<String, String>> indexes;
+public class MemoryDatumStore implements DatumStore, Serializable {
+    private transient final TreeMap<String, String> map;
+    private transient final TreeMap<String, Index<String, String>> indexes;
     private final long nextId;
 
     public MemoryDatumStore() {
@@ -26,6 +32,31 @@ public class MemoryDatumStore implements DatumStore {
         this.map = map;
         this.nextId = nextId;
         this.indexes = indexes;
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.writeObject(map.toMutableMap());
+        out.writeLong(nextId);
+        out.writeObject(indexes.toMutableMap());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        try {
+            setFinalField("map", TreeMap.fromMutableMap(Ord.stringOrd, (Map) in.readObject()));
+            setFinalField("nextId", in.readLong());
+            setFinalField("indexes", TreeMap.fromMutableMap(Ord.stringOrd, (Map) in.readObject()));
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setFinalField(String fieldName, Object value) throws NoSuchFieldException, IllegalAccessException {
+        Field f = MemoryDatumStore.class.getDeclaredField(fieldName);
+        f.setAccessible(true);
+        f.set(this, value);
     }
 
     @Override public DatumStore createId(TempId id) {
@@ -45,7 +76,7 @@ public class MemoryDatumStore implements DatumStore {
 
     @Override public Iterable<String> iterate(String action, final String startKey, final String endKey) {
         final Index<String, String> index = indexes.get(action).orSome(new FjSetIndex<String, String>());
-        final Iterator<Index.IndexEntry<String, String>> itr = (Iterator<Index.IndexEntry<String, String>>) index.iterator(startKey, endKey);
+        final Iterator<Index.IndexEntry<String, String>> itr = index.iterator(startKey, endKey);
         final TransformingIterator<Index.IndexEntry<String, String>, String> itr2 =
                 new TransformingIterator<Index.IndexEntry<String, String>, String>(itr, new F<Index.IndexEntry<String, String>, String>() {
                     @Override public String f(Index.IndexEntry<String, String> i) {
