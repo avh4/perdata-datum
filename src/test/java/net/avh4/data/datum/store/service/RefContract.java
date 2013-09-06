@@ -8,7 +8,7 @@ import static org.fest.assertions.Assertions.assertThat;
 public abstract class RefContract {
     protected Ref<String> subject;
 
-    protected abstract Ref<String> createSubject(String initialValue);
+    protected abstract Ref<String> createSubject(String initialValue) throws Exception;
 
     @Before
     public void setUp() throws Exception {

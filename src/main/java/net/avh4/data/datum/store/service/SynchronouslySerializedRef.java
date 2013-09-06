@@ -6,8 +6,8 @@ import java.io.Serializable;
 public class SynchronouslySerializedRef<T extends Serializable> extends InMemoryRef<T> {
     private final Serializer<T> serializer;
 
-    public SynchronouslySerializedRef(Serializer<T> serializer, T initialValue) {
-        super(initialValue);
+    public SynchronouslySerializedRef(Serializer<T> serializer) throws IOException {
+        super(serializer.readLatest());
         this.serializer = serializer;
     }
 

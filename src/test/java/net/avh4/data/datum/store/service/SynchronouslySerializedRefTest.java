@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verify;
 
 public class SynchronouslySerializedRefTest extends RefContract {
@@ -16,8 +17,9 @@ public class SynchronouslySerializedRefTest extends RefContract {
         super.setUp();
     }
 
-    @Override protected Ref<String> createSubject(String initialValue) {
-        return new SynchronouslySerializedRef<String>(serializer, initialValue);
+    @Override protected Ref<String> createSubject(String initialValue) throws Exception {
+        stub(serializer.readLatest()).toReturn(initialValue);
+        return new SynchronouslySerializedRef<String>(serializer);
     }
 
     @Test
