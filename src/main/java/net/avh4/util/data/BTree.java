@@ -95,15 +95,15 @@ public class BTree {
         int d = this.keys.length / 2;
         String[] k = new String[d * 2 + 1];
         long n[] = new long[d * 2 + 2];
-        int m = 0, b = 0, p = 0;
-        for (int j = 0; j < k.length; ) {
-            if (b == 0 && (j >= this.keys.length || result.keys[0].compareTo(this.keys[j]) < 0)) {
-                k[j++] = result.keys[b++];
-                n[p++] = result.nodes[0];
-                n[p++] = result.nodes[1];
+        int m = 0, b = 0;
+        for (int j = 0; j < k.length; j++) {
+            if (b == 0 && i == j) {
+                k[j] = result.keys[b++];
+                n[j] = result.nodes[0];
+                n[j + 1] = result.nodes[1];
             } else {
-                k[j++] = this.keys[m];
-                n[p++] = this.nodes[m + b];
+                k[j] = this.keys[m];
+                n[j + b] = this.nodes[m + b];
                 m++;
             }
         }
