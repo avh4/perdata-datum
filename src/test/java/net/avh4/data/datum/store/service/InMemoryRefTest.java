@@ -1,4 +1,4 @@
-package net.avh4.data.datum.transact;
+package net.avh4.data.datum.store.service;
 
 public class InMemoryRefTest extends RefContract {
 

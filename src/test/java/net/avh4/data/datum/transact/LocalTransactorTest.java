@@ -1,6 +1,7 @@
 package net.avh4.data.datum.transact;
 
 import net.avh4.data.datum.store.DatumStore;
+import net.avh4.data.datum.store.service.Ref;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

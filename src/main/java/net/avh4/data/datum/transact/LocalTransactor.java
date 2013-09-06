@@ -1,6 +1,9 @@
 package net.avh4.data.datum.transact;
 
 import net.avh4.data.datum.store.DatumStore;
+import net.avh4.data.datum.store.service.Ref;
+
+import java.io.IOException;
 
 public class LocalTransactor implements Transactor {
 
@@ -16,6 +19,10 @@ public class LocalTransactor implements Transactor {
             store = command.resolveTempIds(store);
             store = command.execute(store);
         }
-        return storage.commit(store);
+        try {
+            return storage.commit(store);
+        } catch (IOException e) {
+            throw new TransactionException("Could not commit transaction", e);
+        }
     }
 }

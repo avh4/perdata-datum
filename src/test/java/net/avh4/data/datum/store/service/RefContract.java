@@ -1,4 +1,4 @@
-package net.avh4.data.datum.transact;
+package net.avh4.data.datum.store.service;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.fest.assertions.Assertions.assertThat;
 
 public abstract class RefContract {
-    private Ref<String> subject;
+    protected Ref<String> subject;
 
     protected abstract Ref<String> createSubject(String initialValue);
 

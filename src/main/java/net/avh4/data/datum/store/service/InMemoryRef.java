@@ -1,4 +1,6 @@
-package net.avh4.data.datum.transact;
+package net.avh4.data.datum.store.service;
+
+import java.io.IOException;
 
 public class InMemoryRef<T> implements Ref<T> {
     private T value;
@@ -7,7 +9,7 @@ public class InMemoryRef<T> implements Ref<T> {
         this.value = initial;
     }
 
-    @Override public T commit(T newValue) {
+    @Override public T commit(T newValue) throws IOException {
         value = newValue;
         return newValue;
     }
