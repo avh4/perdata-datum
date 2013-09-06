@@ -108,14 +108,15 @@ public class BTree {
             }
         }
 
-        for (int x = 0; x <= d; x++) {
-            if (x < d) leftKeys[x] = k[x];
-            else keys[0] = k[x];
-            leftNodes[x] = n[x];
-        }
-        for (int x = 0; x <= d; x++) {
-            if (x < d) rightKeys[x] = k[x + d + 1];
-            rightNodes[x] = n[x + d + 1];
+        for (int li = 0, ri = d + 1; li <= d; li++, ri++) {
+            if (li < d) {
+                leftKeys[li] = k[li];
+                rightKeys[li] = k[ri];
+            } else {
+                keys[0] = k[li];
+            }
+            leftNodes[li] = n[li];
+            rightNodes[li] = n[ri];
         }
 
         BTree left = new BTree(storage, leftKeys, leftNodes);
