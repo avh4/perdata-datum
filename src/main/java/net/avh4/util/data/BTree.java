@@ -93,41 +93,28 @@ public class BTree {
         long[] rightNodes = new long[this.nodes.length];
 
         int d = this.keys.length / 2;
-        String[] k = new String[d*2+1];
-        long n[] = new long[d*2 + 2];
-        boolean placedResult = false;
-        for (int j = 0; j < k.length; j++) {
-            if (placedResult) {
-                k[j] = this.keys[j-1];
-            } else if (j < this.keys.length && result.keys[0].compareTo(this.keys[j]) >= 0) {
-                k[j] = this.keys[j];
+        String[] k = new String[d * 2 + 1];
+        long n[] = new long[d * 2 + 2];
+        int m = 0, b = 0, p = 0;
+        for (int j = 0; j < k.length; ) {
+            if (b == 0 && (j >= this.keys.length || result.keys[0].compareTo(this.keys[j]) < 0)) {
+                k[j++] = result.keys[b++];
+                n[p++] = result.nodes[0];
+                n[p++] = result.nodes[1];
             } else {
-                k[j] =result.keys[0];
-                placedResult = true;
+                k[j++] = this.keys[m];
+                n[p++] = this.nodes[m + b];
+                m++;
             }
         }
 
-        if (i == 0) {
-            leftNodes[0] = result.nodes[0];
-            leftNodes[1] = result.nodes[1];
-            leftNodes[2] = this.nodes[1];
-            rightNodes[0] = this.nodes[2];
-            rightNodes[1] = this.nodes[3];
-            rightNodes[2] = this.nodes[4];
-        } else if (i == 4) {
-            leftNodes[0] = this.nodes[0];
-            leftNodes[1] = this.nodes[1];
-            leftNodes[2] = this.nodes[2];
-            rightNodes[0] = this.nodes[3];
-            rightNodes[1] = result.nodes[0];
-            rightNodes[2] = result.nodes[1];
-        } else {
-            throw new RuntimeException("Not implemented");
-        }
         int j = 0;
         for (int l = 0; l < d; l++) leftKeys[l] = k[j++];
         keys[0] = k[j++];
         for (int l = 0; l < d; l++) rightKeys[l] = k[j++];
+        int y = 0;
+        for (int x = 0; x < d + 1; x++) leftNodes[x] = n[y++];
+        for (int x = 0; x < d + 1; x++) rightNodes[x] = n[y++];
 
         BTree left = new BTree(storage, leftKeys, leftNodes);
         BTree right = new BTree(storage, rightKeys, rightNodes);
