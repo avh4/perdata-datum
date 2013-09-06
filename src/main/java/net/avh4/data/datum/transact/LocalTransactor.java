@@ -3,18 +3,19 @@ package net.avh4.data.datum.transact;
 import net.avh4.data.datum.store.DatumStore;
 
 public class LocalTransactor implements Transactor {
-    private DatumStore store;
 
-    public LocalTransactor(DatumStore store) {
-        this.store = store;
+    private final Ref<DatumStore> storage;
+
+    public LocalTransactor(Ref<DatumStore> storage) {
+        this.storage = storage;
     }
 
     @Override public DatumStore transact(Transaction transaction) throws TransactionException {
-        DatumStore store = this.store;
+        DatumStore store = storage.get();
         for (Command command : transaction.commands()) {
             store = command.resolveTempIds(store);
             store = command.execute(store);
         }
-        return (this.store = store);
+        return storage.commit(store);
     }
 }

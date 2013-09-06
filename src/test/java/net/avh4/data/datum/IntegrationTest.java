@@ -8,14 +8,13 @@ import net.avh4.data.datum.primitives.KnownId;
 import net.avh4.data.datum.primitives.TempId;
 import net.avh4.data.datum.store.DatumStore;
 import net.avh4.data.datum.store.MemoryDatumStore;
-import net.avh4.data.datum.transact.LocalTransactor;
-import net.avh4.data.datum.transact.Transaction;
-import net.avh4.data.datum.transact.TransactionException;
-import net.avh4.data.datum.transact.Transactor;
+import net.avh4.data.datum.transact.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.injectors.Provider;
+import org.picocontainer.injectors.ProviderAdapter;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -47,12 +46,20 @@ public class IntegrationTest {
         String attempts();
     }
 
+    public static class TransactorProvider implements Provider {
+        @SuppressWarnings("UnusedDeclaration")
+        public LocalTransactor provide() {
+            final MemoryDatumStore datumStore = new MemoryDatumStore();
+            final InMemoryRef<DatumStore> ref = new InMemoryRef<DatumStore>(datumStore);
+            return new LocalTransactor(ref);
+        }
+    }
+
     @Before
     public void setUp() throws Exception {
         MutablePicoContainer pico = new DefaultPicoContainer();
         pico.addComponent(DatabaseImpl.class);
-        pico.addComponent(LocalTransactor.class);
-        pico.addComponent(MemoryDatumStore.class);
+        pico.addAdapter(new ProviderAdapter(new TransactorProvider()));
         store = pico.getComponent(DatumStore.class);
         transactor = pico.getComponent(Transactor.class);
         direct = pico.getComponent(DirectAccess.class);

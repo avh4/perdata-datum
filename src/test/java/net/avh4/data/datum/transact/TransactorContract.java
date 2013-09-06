@@ -14,15 +14,17 @@ import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verify;
 
 public abstract class TransactorContract {
-    private Transactor subject;
-    @Mock private Transaction txn;
-    @Mock private Command c1;
-    @Mock private Command c2;
-    @Mock private DatumStore store;
-    @Mock private DatumStore store2;
-    @Mock private DatumStore store3;
+    protected Transactor subject;
+    @Mock protected Transaction txn;
+    @Mock protected Command c1;
+    @Mock protected Command c2;
+    @Mock protected DatumStore store;
+    @Mock protected DatumStore store_afterC1;
+    @Mock protected DatumStore store_afterC1C2;
 
     protected abstract Transactor createSubject(DatumStore store);
+
+    protected abstract DatumStore expectedResultFor(DatumStore store_afterTransaction);
 
     @Before
     public void setUp() throws Exception {
@@ -32,7 +34,8 @@ public abstract class TransactorContract {
         stub(store.set(anyString(), anyString(), anyString())).toReturn(store);
 
         stub(txn.commands()).toReturn(Arrays.asList(c1));
-        stub(c1.execute(store)).toReturn(store2);
+        stub(c1.execute(store)).toReturn(store_afterC1);
+        stub(c2.execute(store_afterC1)).toReturn(store_afterC1C2);
 
         subject = createSubject(store);
     }
@@ -45,7 +48,7 @@ public abstract class TransactorContract {
 
     @Test
     public void shouldHaveResult() throws Exception {
-        assertThat(subject.transact(txn)).isSameAs(store2);
+        assertThat(subject.transact(txn)).isSameAs(expectedResultFor(store_afterC1));
     }
 
     @Test
