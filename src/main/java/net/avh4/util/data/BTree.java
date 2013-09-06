@@ -91,19 +91,36 @@ public class BTree {
         long[] nodes = new long[this.nodes.length];
         long[] leftNodes = new long[this.nodes.length];
         long[] rightNodes = new long[this.nodes.length];
-        if (i != 0) throw new RuntimeException("Not implemented");
-        leftNodes[0] = result.nodes[0];
-        leftNodes[1] = result.nodes[1];
-        leftNodes[2] = this.nodes[1];
-        rightNodes[0] = this.nodes[2];
-        rightNodes[1] = this.nodes[3];
-        rightNodes[2]  = this.nodes[4];
 
-        leftKeys[0] = result.keys[0];
-        leftKeys[1] = this.keys[0];
-        keys[0] = this.keys[1];
-        rightKeys[0] = this.keys[2];
-        rightKeys[1] = this.keys[3];
+        if (i == 0) {
+            leftNodes[0] = result.nodes[0];
+            leftNodes[1] = result.nodes[1];
+            leftNodes[2] = this.nodes[1];
+            rightNodes[0] = this.nodes[2];
+            rightNodes[1] = this.nodes[3];
+            rightNodes[2] = this.nodes[4];
+
+            leftKeys[0] = result.keys[0];
+            leftKeys[1] = this.keys[0];
+            keys[0] = this.keys[1];
+            rightKeys[0] = this.keys[2];
+            rightKeys[1] = this.keys[3];
+        } else if (i == 4) {
+            leftNodes[0] = this.nodes[0];
+            leftNodes[1] = this.nodes[1];
+            leftNodes[2] = this.nodes[2];
+            rightNodes[0] = this.nodes[3];
+            rightNodes[1] = result.nodes[0];
+            rightNodes[2] = result.nodes[1];
+
+            leftKeys[0] = this.keys[0];
+            leftKeys[1] = this.keys[1];
+            keys[0] = this.keys[2];
+            rightKeys[0] = this.keys[3];
+            rightKeys[1] = result.keys[0];
+        } else {
+            throw new RuntimeException("Not implemented");
+        }
 
         BTree left = new BTree(storage, leftKeys, leftNodes);
         BTree right = new BTree(storage, rightKeys, rightNodes);
