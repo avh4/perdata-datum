@@ -9,7 +9,7 @@
 
     <groupId>net.avh4.data</groupId>
     <artifactId>datum</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.1</version>
     <packaging>jar</packaging>
 
     <name>perdata-datum</name>
