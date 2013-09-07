@@ -2,7 +2,7 @@ package net.avh4.data.datum.store.service;
 
 import java.io.*;
 
-class FileSerializer<T extends Serializable> implements Serializer<T> {
+public class FileSerializer<T extends Serializable> implements Serializer<T> {
     private final File root;
     private T initialValue;
 
