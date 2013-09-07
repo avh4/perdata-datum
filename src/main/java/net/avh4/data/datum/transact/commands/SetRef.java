@@ -19,8 +19,8 @@ public class SetRef implements Command {
     @Override public DatumStore execute(DatumStore store) throws TransactionException {
         final String entityId = entity.id();
         final String value = ref.id();
-        store = store.set(entityId, action, value);
         final String oldValue = store.get(entityId, action);
+        store = store.set(entityId, action, value);
         if (oldValue != null) {
             store = store.removeIndex(action, oldValue, entityId);
         }
