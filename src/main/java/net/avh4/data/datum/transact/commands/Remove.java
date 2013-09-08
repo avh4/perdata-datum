@@ -51,4 +51,26 @@ public class Remove implements Command {
     @Override public String toString() {
         return "Remove(" + entity + ", " + action + ", " + value + ')';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Remove remove = (Remove) o;
+
+        if (action != null ? !action.equals(remove.action) : remove.action != null) return false;
+        if (entity != null ? !entity.equals(remove.entity) : remove.entity != null) return false;
+        if (value != null ? !value.equals(remove.value) : remove.value != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entity != null ? entity.hashCode() : 0;
+        result = 31 * result + (action != null ? action.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
+    }
 }

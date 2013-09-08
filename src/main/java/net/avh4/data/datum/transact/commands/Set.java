@@ -35,4 +35,26 @@ public class Set implements Command {
     @Override public String toString() {
         return "Set(" + entity + ", " + action + ", " + value + ')';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Set set = (Set) o;
+
+        if (action != null ? !action.equals(set.action) : set.action != null) return false;
+        if (entity != null ? !entity.equals(set.entity) : set.entity != null) return false;
+        if (value != null ? !value.equals(set.value) : set.value != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entity != null ? entity.hashCode() : 0;
+        result = 31 * result + (action != null ? action.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
+    }
 }

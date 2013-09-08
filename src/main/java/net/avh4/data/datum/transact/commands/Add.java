@@ -40,4 +40,26 @@ public class Add implements Command {
     @Override public String toString() {
         return "Add(" + entity + ", " + action + ", " + value + ')';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Add add = (Add) o;
+
+        if (action != null ? !action.equals(add.action) : add.action != null) return false;
+        if (entity != null ? !entity.equals(add.entity) : add.entity != null) return false;
+        if (value != null ? !value.equals(add.value) : add.value != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entity != null ? entity.hashCode() : 0;
+        result = 31 * result + (action != null ? action.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
+    }
 }

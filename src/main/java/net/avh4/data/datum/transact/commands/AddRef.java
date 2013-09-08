@@ -42,4 +42,26 @@ public class AddRef implements Command {
     @Override public String toString() {
         return "AddRef(" + entity + ", " + action + ", " + ref + ')';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AddRef addRef = (AddRef) o;
+
+        if (action != null ? !action.equals(addRef.action) : addRef.action != null) return false;
+        if (entity != null ? !entity.equals(addRef.entity) : addRef.entity != null) return false;
+        if (ref != null ? !ref.equals(addRef.ref) : addRef.ref != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entity != null ? entity.hashCode() : 0;
+        result = 31 * result + (action != null ? action.hashCode() : 0);
+        result = 31 * result + (ref != null ? ref.hashCode() : 0);
+        return result;
+    }
 }
