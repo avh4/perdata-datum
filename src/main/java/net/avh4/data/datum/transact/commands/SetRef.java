@@ -33,4 +33,9 @@ public class SetRef implements Command {
         store = ref.resolve(store);
         return store;
     }
+
+
+    @Override public String toString() {
+        return "SetRef(" + entity + ", " + action + ", " + ref + ')';
+    }
 }

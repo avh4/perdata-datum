@@ -38,4 +38,8 @@ public class AddRef implements Command {
         store = ref.resolve(store);
         return store;
     }
+
+    @Override public String toString() {
+        return "AddRef(" + entity + ", " + action + ", " + ref + ')';
+    }
 }

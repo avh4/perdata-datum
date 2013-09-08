@@ -31,4 +31,8 @@ public class Set implements Command {
         store = entity.resolve(store);
         return store;
     }
+
+    @Override public String toString() {
+        return "Set(" + entity + ", " + action + ", " + value + ')';
+    }
 }

@@ -47,4 +47,8 @@ public class Remove implements Command {
         store = entity.resolve(store);
         return store;
     }
+
+    @Override public String toString() {
+        return "Remove(" + entity + ", " + action + ", " + value + ')';
+    }
 }

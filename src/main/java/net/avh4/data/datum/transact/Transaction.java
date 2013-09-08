@@ -23,6 +23,10 @@ public class Transaction {
         return commands;
     }
 
+    @Override public String toString() {
+        return "Transaction" + commands.toString();
+    }
+
     //
     // All the following methods are simply convenience methods to create various commonly-used Command objects
     //

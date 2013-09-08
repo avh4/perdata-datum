@@ -49,4 +49,8 @@ public class RemoveRef implements Command {
         store = ref.resolve(store);
         return store;
     }
+
+    @Override public String toString() {
+        return "RemoveRef(" + entity + ", " + action + ", " + ref + ')';
+    }
 }

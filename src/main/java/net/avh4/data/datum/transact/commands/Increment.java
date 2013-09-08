@@ -35,4 +35,8 @@ public class Increment implements Command {
     private String formatIndex(int v) {
         return String.format("%010d", v);
     }
+
+    @Override public String toString() {
+        return "Increment(" + entity + ", " + action + ')';
+    }
 }
