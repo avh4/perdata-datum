@@ -14,6 +14,10 @@ public class JavaQuery<T> {
         this(resultClass, new Query(index, value));
     }
 
+    public JavaQuery(Class<T> resultClass, String index) {
+        this(resultClass, new Query(index));
+    }
+
     public JavaQuery(Class<T> resultClass, Query query) {
         this.resultClass = resultClass;
         this.query = query;

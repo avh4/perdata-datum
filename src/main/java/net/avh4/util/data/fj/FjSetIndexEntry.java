@@ -1,15 +1,15 @@
 package net.avh4.util.data.fj;
 
-import fj.F2;
 import fj.Ord;
-import fj.Ordering;
 import net.avh4.util.data.Index;
 
 import java.io.Serializable;
 
-import static fj.Function.curry;
+class FjSetIndexEntry<K extends Comparable<K>, V extends Comparable<V>>
+        implements Index.IndexEntry<K, V>, Comparable<FjSetIndexEntry<K, V>>, Serializable {
 
-class FjSetIndexEntry<K extends Comparable<K>, V extends Comparable<V>> implements Index.IndexEntry<K, V>, Serializable {
+    private static final long serialVersionUID = -3671914170699792093L;
+
     private final K key;
     private final V value;
     private final boolean matchEnd;
@@ -20,28 +20,14 @@ class FjSetIndexEntry<K extends Comparable<K>, V extends Comparable<V>> implemen
         this.matchEnd = false;
     }
 
-    public FjSetIndexEntry(K key, Void value, boolean matchEnd) {
+    public FjSetIndexEntry(K key, @SuppressWarnings("UnusedParameters") Void value, boolean matchEnd) {
         this.key = key;
         this.value = null;
         this.matchEnd = matchEnd;
     }
 
     public static <K extends Comparable<K>, V extends Comparable<V>> Ord<FjSetIndexEntry<K, V>> ord() {
-        final Ord<K> oa = Ord.comparableOrd();
-        return Ord.ord(curry(new F2<FjSetIndexEntry<K, V>, FjSetIndexEntry<K, V>, Ordering>() {
-            public Ordering f(final FjSetIndexEntry<K, V> a, final FjSetIndexEntry<K, V> b) {
-                if (!oa.eq(a.key, b.key)) return oa.compare(a.key, b.key);
-                else {
-                    if (a.value != null && b.value != null) return Ord.<V>comparableOrd().compare(a.value, b.value);
-                    else if (a.matchEnd && b.matchEnd) return Ordering.EQ;
-                    else if (a.matchEnd) return Ordering.GT;
-                    else if (b.matchEnd) return Ordering.LT;
-                    else if (a.value != null) return Ordering.GT;
-                    else if (b.value != null) return Ordering.LT;
-                    else return Ordering.EQ;
-                }
-            }
-        }));
+        return Ord.comparableOrd();
     }
 
     @Override public K key() {
@@ -74,5 +60,21 @@ class FjSetIndexEntry<K extends Comparable<K>, V extends Comparable<V>> implemen
 
     @Override public String toString() {
         return "<" + key + ":" + value + '>';
+    }
+
+    @Override public int compareTo(FjSetIndexEntry<K, V> b) {
+        if (key == null && b.key == null && matchEnd == b.matchEnd) return 0;
+        if (key == null && matchEnd) return 1;
+        if (b.key == null && b.matchEnd) return -1;
+        if (key == null) return -1;
+        if (b.key == null) return 1;
+        if (!key.equals(b.key)) return key.compareTo(b.key);
+        if (value != null && b.value != null) return value.compareTo(b.value);
+        if (matchEnd && b.matchEnd) return 0;
+        if (matchEnd) return 1;
+        if (b.matchEnd) return -1;
+        if (value != null) return 1;
+        if (b.value != null) return -1;
+        return 0;
     }
 }

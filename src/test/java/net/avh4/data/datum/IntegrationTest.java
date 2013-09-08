@@ -90,7 +90,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testQuery() throws Exception {
+    public void testSpecificQuery() throws Exception {
         createTestData();
 
         JavaQuery<Book> q = new JavaQuery<Book>(Book.class, "db:type", "book");
@@ -105,6 +105,18 @@ public class IntegrationTest {
         assertThat(books[0].chapters()[0].body()).startsWith("Mr. Plumbean lived on a");
         assertThat(books[0].chapters()[1].title()).isEqualTo("Chapter 2");
         assertThat(books[0].chapters()[1].body()).startsWith("He liked it that");
+    }
+
+    @Test
+    public void testOrderedQuery() throws Exception {
+        createTestData();
+
+        JavaQuery<Book.Chapter> q = new JavaQuery<Book.Chapter>(Book.Chapter.class, "order");
+        Book.Chapter[] chapters = q.execute(store);
+        assertThat(chapters).isNotNull().hasSize(2).hasAllElementsOfType(Book.Chapter.class);
+
+        assertThat(chapters[0].title()).isEqualTo("Chapter 1");
+        assertThat(chapters[1].title()).isEqualTo("Chapter 2");
     }
 
     private void createTestData() throws TransactionException {
@@ -123,6 +135,7 @@ public class IntegrationTest {
                     .set(bookId, "author", author)
 
                     .set(chapter1, "title", "Chapter 1")
+                    .set(chapter1, "order", "1")
                     .set(chapter1, "body", "Mr. Plumbean lived on a ...")
                     .add(bookId, "chapters", chapter1);
 
@@ -137,6 +150,7 @@ public class IntegrationTest {
                     .set(author, "name", "Daniel Manus Pinkwater")
 
                     .set(chapter2, "title", "Chapter 2")
+                    .set(chapter2, "order", "2")
                     .set(chapter2, "body", "He liked it that ...")
                     .add(bookId, "chapters", chapter2);
 

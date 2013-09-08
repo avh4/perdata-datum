@@ -3,6 +3,8 @@ package net.avh4.util.data;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 public abstract class IndexContract {
@@ -42,5 +44,13 @@ public abstract class IndexContract {
         subject = subject.add("Arnold", "Arnold Palmer").add("Betty", "Betty White");
         assertThat(subject.iterator("Arnold", "Arnold")).hasSize(1);
         assertThat(subject.iterator("Arnold", "Arnold").next().value()).isEqualTo("Arnold Palmer");
+    }
+
+    @Test
+    public void iterator_iteratesInAscendingOrder() throws Exception {
+        subject = subject.add("Arnold", "Arnold Palmer").add("Betty", "Betty White");
+        final Iterator<Index.IndexEntry<String, String>> itr = subject.iterator(null, null);
+        assertThat(itr.next().value()).isEqualTo("Arnold Palmer");
+        assertThat(itr.next().value()).isEqualTo("Betty White");
     }
 }

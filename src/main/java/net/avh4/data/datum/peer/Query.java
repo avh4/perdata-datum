@@ -14,6 +14,11 @@ public class Query {
         this.value = value;
     }
 
+    public Query(String index) {
+        this.index = index;
+        this.value = null;
+    }
+
     public KnownId[] execute(DatumStore store) {
         ArrayList<KnownId> matches = new ArrayList<KnownId>();
         for (String id : store.iterate(index, value, value)) {

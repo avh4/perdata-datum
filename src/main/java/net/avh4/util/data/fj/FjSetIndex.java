@@ -1,5 +1,8 @@
 package net.avh4.util.data.fj;
 
+import fj.F;
+import fj.Ord;
+import fj.Ordering;
 import fj.P3;
 import fj.data.Option;
 import fj.data.Set;
@@ -16,7 +19,20 @@ public class FjSetIndex<K extends Comparable<K>, V extends Comparable<V>> implem
     private final Set<FjSetIndexEntry<K, V>> set;
 
     public FjSetIndex() {
-        this(Set.empty(FjSetIndexEntry.<K, V>ord()));
+        this(Set.empty(FjSetIndex.<K, V>getOrd()));
+    }
+
+    private static <K extends Comparable<K>, V extends Comparable<V>> Ord<FjSetIndexEntry<K, V>> getOrd() {
+        final Ord<FjSetIndexEntry<K, V>> reverseOrd = FjSetIndexEntry.ord();
+        return Ord.ord(new F<FjSetIndexEntry<K, V>, F<FjSetIndexEntry<K, V>, Ordering>>() {
+            @Override public F<FjSetIndexEntry<K, V>, Ordering> f(final FjSetIndexEntry<K, V> a) {
+                return new F<FjSetIndexEntry<K, V>, Ordering>() {
+                    @Override public Ordering f(FjSetIndexEntry<K, V> b) {
+                        return reverseOrd.compare(b, a);
+                    }
+                };
+            }
+        });
     }
 
     protected FjSetIndex(Set<FjSetIndexEntry<K, V>> set) {
@@ -31,7 +47,7 @@ public class FjSetIndex<K extends Comparable<K>, V extends Comparable<V>> implem
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         try {
-            setFinalField("set", Set.set(FjSetIndexEntry.ord(), (FjSetIndexEntry[]) in.readObject()));
+            setFinalField("set", Set.set(FjSetIndex.getOrd(), (FjSetIndexEntry[]) in.readObject()));
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
@@ -61,10 +77,10 @@ public class FjSetIndex<K extends Comparable<K>, V extends Comparable<V>> implem
         final FjSetIndexEntry<K, V> start = new FjSetIndexEntry<K, V>(startKey, null, false);
         final FjSetIndexEntry<K, V> end = new FjSetIndexEntry<K, V>(endKey, null, true);
 
-        final Set<FjSetIndexEntry<K, V>> skipPre = set.split(start)._3();
+        final Set<FjSetIndexEntry<K, V>> skipPre = set.split(start)._1();
         final P3<Set<FjSetIndexEntry<K, V>>, Option<FjSetIndexEntry<K, V>>, Set<FjSetIndexEntry<K, V>>> split
                 = skipPre.split(end);
-        Set<FjSetIndexEntry<K, V>> matches = split._1();
+        Set<FjSetIndexEntry<K, V>> matches = split._3();
         if (split._2().isSome()) matches = matches.insert(split._2().some());
 
         //noinspection unchecked
