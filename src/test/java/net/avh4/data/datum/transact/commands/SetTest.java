@@ -36,6 +36,12 @@ public class SetTest {
     }
 
     @Test
+    public void withNull_shouldNotAddIndex() throws Exception {
+        store = new Set(robot, "loves", null).execute(store);
+        assertThat(store.iterate("loves", null, null)).isEmpty();
+    }
+
+    @Test
     public void withPreviousValue_shouldRemoveOldIndex() throws Exception {
         store = store.set("robot", "loves", "doggy");
         store = subject.execute(store);
